@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Status — Expense Capture</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<header class="top">
+  <h1>Status</h1>
+  <p>Where every capture stands, and export what's confirmed.</p>
+</header>
+<main>
+  <div class="stat-grid" id="stats"></div>
+
+  <div class="card">
+    <strong>Export confirmed expenses</strong>
+    <p class="record-sub">Marks them as exported. Concur route feeds Claude Cowork or the Concur UI; personal/tax route is a separate log.</p>
+    <div class="export-grid">
+      <button class="ghost" id="export-concur-csv">Concur → CSV</button>
+      <button class="ghost" id="export-concur-json">Concur → JSON</button>
+      <button class="ghost" id="export-tax-csv">Personal/tax → CSV</button>
+      <button class="ghost" id="export-tax-json">Personal/tax → JSON</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <strong>Recent activity</strong>
+    <div id="recent"></div>
+  </div>
+</main>
+
+<nav class="tabbar">
+  <a href="/index.html"><span class="icon">➕</span>Capture</a>
+  <a href="/review.html"><span class="icon">🗂️</span>Review</a>
+  <a href="/status.html" class="active"><span class="icon">📊</span>Status</a>
+</nav>
+
+<script src="/js/common.js"></script>
+<script src="/js/status.js"></script>
+</body>
+</html>

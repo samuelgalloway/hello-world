@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Capture — Expense Capture</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<header class="top">
+  <h1>Expense Capture</h1>
+  <p>Snap it, say it, or type it. Sort it out later.</p>
+</header>
+<main>
+  <div class="big-actions">
+    <label for="photo-input">
+      <span class="icon">📷</span>
+      Photo
+      <input id="photo-input" type="file" accept="image/*" capture="environment" hidden />
+    </label>
+    <button id="voice-btn" type="button">
+      <span class="icon" id="voice-icon">🎤</span>
+      <span id="voice-label">Voice</span>
+    </button>
+  </div>
+
+  <div class="card">
+    <strong>Manual entry</strong>
+    <form id="manual-form">
+      <label class="field">Date
+        <input type="date" name="date" required />
+      </label>
+      <div class="row2">
+        <label class="field">Category
+          <select name="category" required>
+            <option value="meals">Meals</option>
+            <option value="taxi">Taxi</option>
+            <option value="flights">Flights</option>
+            <option value="hotel">Hotel</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label class="field">Route
+          <select name="route">
+            <option value="concur">Concur</option>
+            <option value="personal_tax">Personal / tax</option>
+          </select>
+        </label>
+      </div>
+      <label class="field">Vendor
+        <input type="text" name="vendor" required />
+      </label>
+      <div class="row2">
+        <label class="field">Amount
+          <input type="number" step="0.01" name="amount" required />
+        </label>
+        <label class="field">Currency
+          <input type="text" name="currency" value="USD" />
+        </label>
+      </div>
+      <label class="field">Payment method
+        <input type="text" name="payment_method" placeholder="e.g. Amex ending 1234" />
+      </label>
+      <label class="field">Business purpose
+        <input type="text" name="business_purpose" required />
+      </label>
+      <label class="field">Attendees (comma separated)
+        <input type="text" name="attendees" placeholder="Nathan, Sarah" />
+      </label>
+      <button class="primary" type="submit">Add expense</button>
+    </form>
+  </div>
+</main>
+
+<nav class="tabbar">
+  <a href="/index.html" class="active"><span class="icon">➕</span>Capture</a>
+  <a href="/review.html"><span class="icon">🗂️</span>Review</a>
+  <a href="/status.html"><span class="icon">📊</span>Status</a>
+</nav>
+
+<script src="/js/common.js"></script>
+<script src="/js/capture.js"></script>
+</body>
+</html>
