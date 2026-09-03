@@ -1,15 +1,16 @@
-<title>Load Ledger</title>
+<title>Home Base</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
 <style>
-  /* ---------- tokens ---------- */
   :root {
     color-scheme: light;
-    --bg: #f6f4ef;
-    --surface: #ffffff;
+    --shell-w: 480px;
+    --bg: #ece9e2;
+    --surface: #f6f4ef;
     --surface-2: #faf8f3;
+    --card: #ffffff;
     --ink: #1c1a16;
     --ink-secondary: #5a5648;
     --muted: #8d8878;
@@ -18,27 +19,23 @@
     --accent: #4a3826;
     --accent-ink: #ffffff;
     --accent-soft: rgba(74,56,38,0.08);
-    --shadow: 0 1px 2px rgba(28,26,22,0.06), 0 4px 16px rgba(28,26,22,0.05);
+    --shadow: 0 1px 2px rgba(28,26,22,0.06), 0 4px 16px rgba(28,26,22,0.06);
 
-    /* categorical: modality identity (validated dataviz slots 1/2/3) */
     --series-run: #2a78d6;
     --series-strength: #eb6834;
     --series-bjj: #1baf7a;
 
-    /* status: acwr zones (fixed ramp, reserved — never reused as series) */
     --zone-under: #7a93b0;
     --zone-optimal: #0ca30c;
     --zone-caution: #fab219;
     --zone-high: #d03b3b;
     --zone-none: #c3c2b7;
 
-    /* periodization phase band (own family, distinct from series + status) */
     --phase-accumulation: #8b86b8;
     --phase-intensification: #6b5fa0;
     --phase-realization: #4a3826;
     --phase-deload: #a9bfa0;
 
-    --chart-surface: #fcfcfb;
     --chart-grid: #e1e0d9;
     --chart-axis: #c3c2b7;
     --success-text: #006300;
@@ -46,9 +43,10 @@
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       color-scheme: dark;
-      --bg: #14130f;
-      --surface: #1c1a16;
-      --surface-2: #201e19;
+      --bg: #0c0b09;
+      --surface: #17150f;
+      --surface-2: #1c1a15;
+      --card: #201e18;
       --ink: #f5f3ee;
       --ink-secondary: #c3c2b7;
       --muted: #928d80;
@@ -57,138 +55,70 @@
       --accent: #d9c6ac;
       --accent-ink: #201a12;
       --accent-soft: rgba(217,198,172,0.10);
-      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
-
-      --series-run: #3987e5;
-      --series-strength: #d95926;
-      --series-bjj: #199e70;
-
-      --zone-under: #96aec7;
-      --zone-optimal: #0ca30c;
-      --zone-caution: #fab219;
-      --zone-high: #e66767;
-      --zone-none: #383835;
-
-      --phase-accumulation: #9c97cc;
-      --phase-intensification: #8478c9;
-      --phase-realization: #d9c6ac;
-      --phase-deload: #93ab89;
-
-      --chart-surface: #1a1a19;
-      --chart-grid: #2c2c2a;
-      --chart-axis: #383835;
-      --success-text: #0ca30c;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.4);
+      --series-run: #3987e5; --series-strength: #d95926; --series-bjj: #199e70;
+      --zone-under: #96aec7; --zone-optimal: #0ca30c; --zone-caution: #fab219; --zone-high: #e66767; --zone-none: #383835;
+      --phase-accumulation: #9c97cc; --phase-intensification: #8478c9; --phase-realization: #d9c6ac; --phase-deload: #93ab89;
+      --chart-grid: #2c2c2a; --chart-axis: #383835; --success-text: #0ca30c;
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --bg: #14130f;
-    --surface: #1c1a16;
-    --surface-2: #201e19;
-    --ink: #f5f3ee;
-    --ink-secondary: #c3c2b7;
-    --muted: #928d80;
-    --border: rgba(255,255,255,0.10);
-    --border-strong: rgba(255,255,255,0.18);
-    --accent: #d9c6ac;
-    --accent-ink: #201a12;
-    --accent-soft: rgba(217,198,172,0.10);
-    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.35);
-
-    --series-run: #3987e5;
-    --series-strength: #d95926;
-    --series-bjj: #199e70;
-
-    --zone-under: #96aec7;
-    --zone-optimal: #0ca30c;
-    --zone-caution: #fab219;
-    --zone-high: #e66767;
-    --zone-none: #383835;
-
-    --phase-accumulation: #9c97cc;
-    --phase-intensification: #8478c9;
-    --phase-realization: #d9c6ac;
-    --phase-deload: #93ab89;
-
-    --chart-surface: #1a1a19;
-    --chart-grid: #2c2c2a;
-    --chart-axis: #383835;
-    --success-text: #0ca30c;
+    --bg: #0c0b09; --surface: #17150f; --surface-2: #1c1a15; --card: #201e18;
+    --ink: #f5f3ee; --ink-secondary: #c3c2b7; --muted: #928d80;
+    --border: rgba(255,255,255,0.10); --border-strong: rgba(255,255,255,0.18);
+    --accent: #d9c6ac; --accent-ink: #201a12; --accent-soft: rgba(217,198,172,0.10);
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.4);
+    --series-run: #3987e5; --series-strength: #d95926; --series-bjj: #199e70;
+    --zone-under: #96aec7; --zone-optimal: #0ca30c; --zone-caution: #fab219; --zone-high: #e66767; --zone-none: #383835;
+    --phase-accumulation: #9c97cc; --phase-intensification: #8478c9; --phase-realization: #d9c6ac; --phase-deload: #93ab89;
+    --chart-grid: #2c2c2a; --chart-axis: #383835; --success-text: #0ca30c;
   }
 
-  * { box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-  h1, h2, h3, .display {
-    font-family: "Barlow Condensed", system-ui, sans-serif;
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    text-wrap: balance;
-    color: var(--ink);
-  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { background: var(--bg); color: var(--ink); font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif; font-size: 14.5px; line-height: 1.45; }
+  h1, h2, h3, .display { font-family: "Barlow Condensed", system-ui, sans-serif; font-weight: 700; letter-spacing: 0.01em; color: var(--ink); }
   .mono, .num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
-  a { color: inherit; }
   button, select, input, textarea { font: inherit; color: inherit; }
-  button { cursor: pointer; }
+  button { cursor: pointer; -webkit-appearance: none; }
+  a { color: inherit; }
   ::selection { background: var(--accent-soft); }
 
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 20px 20px 64px; }
+  .app-shell { max-width: var(--shell-w); margin: 0 auto; min-height: 100vh; background: var(--surface); position: relative; box-shadow: var(--shadow); }
+  .app-main { padding: 4px 16px 96px; }
+  .tab-screen[hidden] { display: none; }
 
-  /* ---------- topbar ---------- */
-  .topbar {
-    display: flex; align-items: baseline; justify-content: space-between;
-    gap: 16px; flex-wrap: wrap; padding: 4px 0 20px;
-    border-bottom: 1px solid var(--border); margin-bottom: 20px;
-  }
-  .brand { display: flex; align-items: baseline; gap: 10px; }
-  .brand .mark {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 30px; height: 30px; border-radius: 7px; background: var(--accent);
-    color: var(--accent-ink); font-family: "Barlow Condensed"; font-weight: 700; font-size: 16px;
-    flex: none;
-  }
-  .brand h1 { font-size: 24px; margin: 0; }
-  .brand .tag { color: var(--muted); font-size: 12.5px; }
-  .topbar-actions { display: flex; gap: 8px; align-items: center; }
+  /* ---------- top bar ---------- */
+  .topbar2 { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .topbar2 .brand { display: flex; align-items: center; gap: 8px; }
+  .topbar2 .mark { width: 26px; height: 26px; border-radius: 7px; background: var(--accent); color: var(--accent-ink); display: flex; align-items: center; justify-content: center; font-family: "Barlow Condensed"; font-weight: 700; font-size: 14px; }
+  .topbar2 h1 { font-size: 19px; margin: 0; }
+  .icon-btn2 { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--border-strong); background: var(--card); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .icon-btn2:active { background: var(--surface-2); }
 
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border-strong);
-    background: var(--surface); font-size: 13px; font-weight: 500; white-space: nowrap;
-    transition: background .12s ease, border-color .12s ease;
-  }
-  .btn:hover { background: var(--surface-2); }
-  .btn:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
-    outline: 2px solid var(--series-run); outline-offset: 2px;
-  }
-  .btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-  .btn-primary:hover { filter: brightness(1.08); }
-  .btn-ghost { background: transparent; border-color: transparent; padding: 8px 10px; }
-  .btn-ghost:hover { background: var(--surface-2); }
-  .btn-sm { padding: 5px 10px; font-size: 12.5px; border-radius: 6px; }
-  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  /* ---------- bottom nav ---------- */
+  .bottom-nav { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: var(--shell-w); display: flex; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--border); z-index: 30; padding-bottom: env(safe-area-inset-bottom, 0); }
+  .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 9px 4px 8px; border: none; background: transparent; color: var(--muted); font-size: 11px; font-weight: 600; }
+  .nav-btn .ic { font-size: 19px; line-height: 1; }
+  .nav-btn[aria-current="true"] { color: var(--accent); }
 
-  /* ---------- layout ---------- */
-  .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
-  @media (max-width: 900px) { .stat-row { grid-template-columns: repeat(2,1fr); } }
-  .tile {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 14px 16px; box-shadow: var(--shadow);
-  }
-  .tile .label { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; }
-  .tile .value { font-family: "Barlow Condensed"; font-size: 32px; font-weight: 700; line-height: 1.1; margin-top: 4px; }
-  .tile .sub { font-size: 12.5px; color: var(--ink-secondary); margin-top: 4px; }
+  /* ---------- fab ---------- */
+  .fab { position: fixed; bottom: 84px; right: max(16px, calc(50% - var(--shell-w) / 2 + 16px)); width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); border: none; font-size: 24px; box-shadow: 0 6px 18px rgba(0,0,0,.25); z-index: 25; display: flex; align-items: center; justify-content: center; }
+  .fab[hidden] { display: none; }
+  /* Reserve a gutter on the Train screen so no card control ever sits under the fixed FAB. */
+  #tab-train > * { margin-right: 58px; }
 
-  .pill {
-    display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px 3px;
-    border-radius: 100px; font-size: 11.5px; font-weight: 600; letter-spacing: .01em;
-  }
-  .pill .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  /* ---------- cards / generic ---------- */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); margin-bottom: 12px; overflow: hidden; }
+  .card-pad { padding: 14px 15px; }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .card-head h2 { font-size: 16.5px; margin: 0; }
+  .card-head .link-btn { font-size: 12px; color: var(--accent); font-weight: 600; background: none; border: none; }
+  .section-title { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; margin: 18px 0 8px 2px; }
+  .section-title:first-child { margin-top: 2px; }
+
+  .pill { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px 3px; border-radius: 100px; font-size: 11.5px; font-weight: 600; }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; }
   .pill-optimal { background: color-mix(in srgb, var(--zone-optimal) 16%, transparent); color: var(--success-text); }
   .pill-optimal .dot { background: var(--zone-optimal); }
   .pill-caution { background: color-mix(in srgb, var(--zone-caution) 22%, transparent); color: #7a5300; }
@@ -201,237 +131,232 @@
   .pill-none { background: var(--surface-2); color: var(--muted); }
   .pill-none .dot { background: var(--zone-none); }
 
-  .grid-main { display: grid; grid-template-columns: 1.62fr 1fr; gap: 16px; align-items: start; }
-  @media (max-width: 980px) { .grid-main { grid-template-columns: 1fr; } }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 14px; border-radius: 9px; border: 1px solid var(--border-strong); background: var(--card); font-size: 13.5px; font-weight: 500; }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn-ghost { background: transparent; border-color: transparent; }
+  .btn-block { width: 100%; }
+  .btn-sm { padding: 6px 10px; font-size: 12.5px; border-radius: 7px; }
+  .btn:disabled { opacity: .45; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--series-run); outline-offset: 2px; }
 
-  .card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-    box-shadow: var(--shadow); margin-bottom: 16px;
-  }
-  .card-head {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    padding: 14px 18px; border-bottom: 1px solid var(--border);
-  }
-  .card-head h2 { font-size: 19px; margin: 0; }
-  .card-head .desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .card-body { padding: 16px 18px 18px; }
-  .card-body.pad-0 { padding: 0; }
-
-  .modality-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-secondary); }
-  .modality-legend .item { display: flex; align-items: center; gap: 6px; }
-  .modality-legend .sw { width: 10px; height: 10px; border-radius: 3px; flex: none; }
-
-  /* ---------- small multiples ---------- */
-  .mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-  @media (max-width: 640px) { .mini-grid { grid-template-columns: 1fr; } }
-  .mini-card { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px 6px; background: var(--surface-2); }
-  .mini-card .mini-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-  .mini-card .mini-title { font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
-  .mini-card .mini-ratio { font-family: "IBM Plex Mono"; font-size: 13px; font-weight: 600; }
-
-  /* ---------- tabs ---------- */
-  .tabs { display: flex; gap: 2px; padding: 4px; background: var(--surface-2); border-radius: 10px; margin: 0 18px 14px; }
-  .tab-btn {
-    flex: 1; padding: 7px 8px; border-radius: 7px; border: none; background: transparent;
-    font-size: 12.5px; font-weight: 600; color: var(--ink-secondary);
-  }
-  .tab-btn[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
-  .tab-panel { padding: 0 18px 18px; }
-  .tab-panel[hidden] { display: none; }
-
-  .field { margin-bottom: 12px; }
+  .field { margin-bottom: 11px; }
   .field label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-secondary); margin-bottom: 4px; }
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .field-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .field-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 9px; }
   input[type=text], input[type=number], input[type=date], input[type=file], select, textarea {
-    width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-strong);
-    background: var(--surface); font-size: 13.5px;
+    width: 100%; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--border-strong); background: var(--surface); font-size: 15px;
   }
-  textarea { resize: vertical; min-height: 64px; }
+  textarea { resize: vertical; min-height: 60px; }
   .hint { font-size: 11.5px; color: var(--muted); margin-top: 3px; }
-  .banner {
-    display: flex; gap: 8px; align-items: flex-start; padding: 9px 11px; border-radius: 8px;
-    background: var(--accent-soft); border: 1px solid var(--border); font-size: 12.5px; margin-bottom: 12px;
-  }
+  .banner { display: flex; gap: 8px; padding: 9px 11px; border-radius: 9px; background: var(--accent-soft); border: 1px solid var(--border); font-size: 12.5px; margin-bottom: 11px; }
   .banner.warn { background: color-mix(in srgb, var(--zone-caution) 14%, transparent); }
+  .banner.err { background: color-mix(in srgb, var(--zone-high) 12%, transparent); }
+  .empty-note { color: var(--muted); font-size: 13px; padding: 14px 0; text-align: center; }
 
-  .exercise-row { display: grid; grid-template-columns: 1.6fr .7fr .7fr .9fr auto; gap: 8px; margin-bottom: 6px; align-items: center; }
-  .exercise-row input { padding: 6px 8px; font-size: 13px; }
-  .tonnage-readout { font-size: 12.5px; color: var(--ink-secondary); margin: 6px 0 2px; }
-  .tonnage-readout .num { color: var(--ink); font-weight: 600; }
+  /* ---------- Today: weather ---------- */
+  .wx-strip { display: flex; gap: 4px; overflow-x: auto; padding: 2px 0 6px; }
+  .wx-day { flex: 1; min-width: 46px; text-align: center; padding: 6px 2px; border-radius: 9px; }
+  .wx-day .d { font-size: 10.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+  .wx-day .ic { font-size: 18px; margin: 3px 0; }
+  .wx-day .hi { font-size: 13px; font-weight: 600; font-family: "IBM Plex Mono"; }
+  .wx-day .rn { font-size: 10.5px; color: var(--series-run); font-family: "IBM Plex Mono"; }
+  .wx-verdict { font-size: 13.5px; font-weight: 500; margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .loc-row { display: flex; gap: 6px; }
+  .loc-results { margin-top: 6px; }
+  .loc-result { padding: 8px 9px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
 
-  /* ---------- heatmap ---------- */
-  .heat-scroll { overflow-x: auto; padding: 4px 18px 18px; }
-  .phase-band { display: grid; grid-auto-flow: column; grid-auto-columns: 16px; gap: 3px; margin-bottom: 4px; height: 16px; }
+  /* ---------- Today: house preview + full list ---------- */
+  .task-row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .task-row:last-child { border-bottom: none; }
+  .task-check { width: 21px; height: 21px; border-radius: 7px; border: 1.5px solid var(--border-strong); background: var(--card); flex: none; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .task-check.done { background: var(--zone-optimal); border-color: var(--zone-optimal); color: #fff; }
+  .task-meta { flex: 1; min-width: 0; }
+  .task-name { font-size: 13.8px; }
+  .task-due { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+  .task-due.overdue { color: var(--zone-high); font-weight: 600; }
+  .add-row { display: flex; gap: 6px; margin-top: 4px; }
+
+  /* ---------- Train ---------- */
+  .stat-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tile2 { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 13px; }
+  .tile2 .label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+  .tile2 .value { font-family: "Barlow Condensed"; font-size: 28px; font-weight: 700; line-height: 1.1; margin-top: 3px; }
+  .tile2 .sub { font-size: 12px; color: var(--ink-secondary); margin-top: 3px; }
+
+  .seg { display: flex; gap: 2px; background: var(--surface-2); border-radius: 9px; padding: 3px; margin-bottom: 8px; }
+  .seg button { flex: 1; padding: 6px 4px; border-radius: 6px; border: none; background: transparent; font-size: 11.5px; font-weight: 600; color: var(--ink-secondary); }
+  .seg button[aria-selected="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+  .heat-scroll { overflow-x: auto; padding-bottom: 4px; }
+  .phase-band { display: grid; grid-auto-flow: column; grid-auto-columns: 13px; gap: 2px; margin-bottom: 4px; height: 13px; }
   .phase-cell { border-radius: 3px; }
-  .heat-grid { display: grid; grid-auto-flow: column; grid-auto-columns: 16px; grid-template-rows: repeat(7, 16px); gap: 3px; }
-  .heat-cell { border-radius: 3px; background: var(--zone-none); opacity: .35; cursor: default; }
-  .heat-cell.has-data { opacity: 1; cursor: pointer; }
-  .heat-cell:hover, .heat-cell:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
-  .heat-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; font-size: 11.5px; color: var(--ink-secondary); }
-  .heat-legend .item { display: flex; align-items: center; gap: 5px; }
-  .heat-legend .sw { width: 10px; height: 10px; border-radius: 3px; }
-  .heat-daynames { display: grid; grid-template-rows: repeat(7,16px); gap: 3px; font-size: 9.5px; color: var(--muted); margin-right: 6px; }
+  .heat-grid { display: grid; grid-auto-flow: column; grid-auto-columns: 13px; grid-template-rows: repeat(7, 13px); gap: 2px; }
+  .heat-cell { border-radius: 3px; background: var(--zone-none); opacity: .35; }
+  .heat-cell.has-data { opacity: 1; }
   .heat-row-wrap { display: flex; }
+  .heat-daynames { display: grid; grid-template-rows: repeat(7,13px); gap: 2px; font-size: 8px; color: var(--muted); margin-right: 5px; }
+  .heat-legend { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 8px; font-size: 10.5px; color: var(--ink-secondary); }
+  .heat-legend .item { display: flex; align-items: center; gap: 4px; }
+  .heat-legend .sw { width: 9px; height: 9px; border-radius: 3px; }
 
-  /* ---------- table ---------- */
-  .table-scroll { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 12.8px; min-width: 720px; }
-  th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; padding: 8px 10px; border-bottom: 1px solid var(--border-strong); position: sticky; top:0; background: var(--surface); }
-  td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
-  tr:hover td { background: var(--surface-2); }
-  .row-mod { display: inline-flex; align-items: center; gap: 6px; }
-  .row-mod .sw { width: 8px; height: 8px; border-radius: 2px; }
-  .icon-btn { border: none; background: transparent; color: var(--muted); padding: 3px 6px; border-radius: 5px; }
-  .icon-btn:hover { color: var(--zone-high); background: var(--surface-2); }
-  .table-filter { display: flex; gap: 8px; padding: 12px 18px 0; flex-wrap: wrap; }
+  .sess-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .sess-row:last-child { border-bottom: none; }
+  .sess-row .sw { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+  .sess-row .d { color: var(--muted); font-size: 11.5px; width: 44px; flex: none; }
+  .sess-row .info { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sess-row .ld { color: var(--ink-secondary); font-size: 12px; flex: none; }
 
-  /* ---------- blocks ---------- */
+  /* ---------- ask claude ---------- */
+  .today-acwr-num { font-family: "Barlow Condensed"; font-size: 26px; font-weight: 700; }
+  .ask-box textarea { min-height: 46px; }
+  .ask-answer { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 13.5px; white-space: pre-wrap; }
+
+  /* ---------- sheets ---------- */
+  .backdrop { position: fixed; inset: 0; background: rgba(10,9,7,.45); z-index: 40; }
+  .backdrop[hidden] { display: none; }
+  .sheet { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: var(--shell-w); max-height: 88vh; overflow-y: auto; background: var(--surface); border-radius: 18px 18px 0 0; z-index: 41; padding: 6px 16px 24px; box-shadow: 0 -8px 30px rgba(0,0,0,.2); }
+  .sheet[hidden] { display: none; }
+  .sheet-handle { width: 36px; height: 4px; border-radius: 2px; background: var(--border-strong); margin: 10px auto 12px; }
+  .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .sheet-head h2 { font-size: 18px; margin: 0; }
+
+  .tabs2 { display: flex; gap: 2px; padding: 3px; background: var(--surface-2); border-radius: 10px; margin-bottom: 12px; }
+  .tab-btn2 { flex: 1; padding: 7px 4px; border-radius: 7px; border: none; background: transparent; font-size: 11.5px; font-weight: 600; color: var(--ink-secondary); }
+  .tab-btn2[aria-selected="true"] { background: var(--card); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .tab-panel2[hidden] { display: none; }
+
+  .exercise-row { display: grid; grid-template-columns: 1.5fr .6fr .6fr .8fr auto; gap: 6px; margin-bottom: 6px; align-items: center; }
+  .exercise-row input { padding: 7px 7px; font-size: 13px; }
+  .tonnage-readout { font-size: 12.5px; color: var(--ink-secondary); margin: 6px 0 2px; }
+
   .block-item { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .block-item:last-child { border-bottom: none; }
   .block-chip { width: 9px; height: 9px; border-radius: 3px; flex: none; }
   .block-item .meta { flex: 1; min-width: 0; }
   .block-item .name { font-weight: 600; font-size: 13px; }
   .block-item .dates { font-size: 11.5px; color: var(--muted); }
+  .icon-btn3 { border: none; background: transparent; color: var(--muted); padding: 4px 6px; border-radius: 5px; font-size: 15px; }
 
-  /* ---------- tooltip ---------- */
-  #tooltip {
-    position: fixed; z-index: 50; pointer-events: none; background: var(--ink); color: var(--bg);
-    font-size: 11.5px; padding: 7px 9px; border-radius: 7px; max-width: 220px; line-height: 1.4;
-    box-shadow: 0 6px 18px rgba(0,0,0,.25); opacity: 0; transform: translateY(2px); transition: opacity .08s ease;
-  }
+  #tooltip { position: fixed; z-index: 60; pointer-events: none; background: var(--ink); color: var(--bg); font-size: 11.5px; padding: 7px 9px; border-radius: 7px; max-width: 200px; line-height: 1.4; box-shadow: 0 6px 18px rgba(0,0,0,.25); opacity: 0; transition: opacity .08s ease; }
   #tooltip.show { opacity: 1; }
-  #tooltip b { color: var(--bg); }
-
-  .chart-svg text { fill: var(--muted); font-size: 9.5px; font-family: "IBM Plex Mono", monospace; }
+  .chart-svg text { fill: var(--muted); font-size: 9px; font-family: "IBM Plex Mono", monospace; }
   .chart-svg .axis-line { stroke: var(--chart-axis); stroke-width: 1; }
   .chart-svg .grid-line { stroke: var(--chart-grid); stroke-width: 1; stroke-dasharray: 2 3; }
 
-  .empty-note { color: var(--muted); font-size: 13px; padding: 20px 0; text-align: center; }
-
-  footer.app-foot { text-align: center; color: var(--muted); font-size: 11.5px; padding-top: 18px; }
-  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .modality-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11px; color: var(--ink-secondary); margin-top: 8px; }
+  .modality-legend .item { display: flex; align-items: center; gap: 5px; }
+  .modality-legend .sw { width: 9px; height: 9px; border-radius: 3px; }
 </style>
 
 <div id="tooltip" role="tooltip"></div>
 
-<div class="wrap">
-  <div class="topbar">
-    <div class="brand">
-      <span class="mark">LL</span>
-      <div>
-        <h1>Load Ledger</h1>
-        <div class="tag">Block-periodized hybrid training &mdash; strength &middot; running &middot; jiu&nbsp;jitsu</div>
-      </div>
-    </div>
-    <div class="topbar-actions">
-      <button class="btn btn-ghost" id="btn-settings" type="button">Settings</button>
-      <button class="btn btn-ghost" id="btn-export" type="button">Export backup</button>
-      <button class="btn btn-primary" id="btn-jump-add" type="button">+ Log a session</button>
-    </div>
+<div class="app-shell">
+  <div class="topbar2">
+    <div class="brand"><span class="mark">HB</span><h1>Home Base</h1></div>
+    <button class="icon-btn2" id="btn-open-settings" type="button" aria-label="Settings">⚙</button>
   </div>
 
-  <div id="sample-banner" class="banner" style="display:none; margin: 0 0 16px;">
-    <span>&#9873;</span>
-    <span>You're looking at <b>example data</b> so the dashboard isn't empty on first open. Log a real session or import a Garmin CSV and this clears itself.
-    <button class="btn btn-sm btn-ghost" id="btn-clear-sample" type="button" style="margin-left:6px; text-decoration:underline;">Clear example data</button></span>
-  </div>
+  <div class="app-main">
+    <!-- ===================== TODAY ===================== -->
+    <section class="tab-screen" id="tab-today">
+      <div class="section-title">Weather</div>
+      <div class="card card-pad" id="weather-card"></div>
 
-  <div class="stat-row" id="stat-row"></div>
-
-  <div class="grid-main">
-    <!-- LEFT: charts + heatmap -->
-    <div>
-      <div class="card">
-        <div class="card-head">
-          <div>
-            <h2>Acute&thinsp;:&thinsp;Chronic Workload Ratio</h2>
-            <div class="desc">7-day acute load vs. 28-day chronic baseline, combined across modalities as % of each one's own rolling average.</div>
-          </div>
-        </div>
-        <div class="card-body" id="overall-chart"></div>
+      <div class="section-title">House</div>
+      <div class="card card-pad">
+        <div class="card-head"><h2>Up next</h2><button class="link-btn" data-goto="house" type="button">See all →</button></div>
+        <div id="today-house-list"></div>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <div>
-            <h2>Per-modality trend</h2>
-            <div class="desc">Same ratio, computed separately per modality on its own objective load metric.</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="mini-grid" id="mini-grid"></div>
-        </div>
+      <div class="section-title">Training</div>
+      <div class="card card-pad" id="today-training" data-goto="train"></div>
+
+      <div class="section-title">Ask</div>
+      <div class="card card-pad ask-box" id="ask-card"></div>
+    </section>
+
+    <!-- ===================== TRAIN ===================== -->
+    <section class="tab-screen" id="tab-train" hidden>
+      <div id="sample-banner" class="banner" style="display:none;">
+        <span>&#9873;</span>
+        <span>Example data so this isn't empty. Log a real session and it clears itself.
+        <button class="btn btn-sm btn-ghost" id="btn-clear-sample" type="button" style="text-decoration:underline; padding:2px 4px;">Clear</button></span>
       </div>
 
-      <div class="card">
-        <div class="card-head">
-          <div>
-            <h2>Recovery heat map</h2>
-            <div class="desc">Daily ACWR zone, with your periodization phase banded across the top.</div>
-          </div>
-        </div>
+      <div class="stat-row2" id="train-stats"></div>
+
+      <div class="card card-pad">
+        <div class="seg" id="train-seg" role="tablist"></div>
+        <div id="train-chart"></div>
+        <div class="modality-legend" id="train-legend"></div>
+      </div>
+
+      <div class="card card-pad">
+        <div class="card-head"><h2>Recovery heat map</h2></div>
         <div class="heat-scroll" id="heatmap-wrap"></div>
       </div>
-    </div>
 
-    <!-- RIGHT: quick add + blocks + settings -->
-    <div>
-      <div class="card" id="quickadd-card">
-        <div class="card-head"><h2>Log a session</h2></div>
-        <div class="tabs" role="tablist" id="tabs">
-          <button class="tab-btn" role="tab" data-tab="manual" aria-selected="true" type="button">Manual</button>
-          <button class="tab-btn" role="tab" data-tab="csv" aria-selected="false" type="button">Garmin CSV</button>
-          <button class="tab-btn" role="tab" data-tab="photo" aria-selected="false" type="button">Photo</button>
-          <button class="tab-btn" role="tab" data-tab="describe" aria-selected="false" type="button">Describe</button>
+      <div class="card card-pad">
+        <div class="card-head"><h2>Recent sessions</h2><button class="link-btn" id="btn-toggle-sessions" type="button">Show all</button></div>
+        <div id="session-list"></div>
+      </div>
+
+      <button class="btn btn-block btn-ghost" id="btn-manage-blocks" type="button" style="border:1px solid var(--border-strong); margin-bottom: 12px;">Manage periodization blocks →</button>
+    </section>
+
+    <!-- ===================== HOUSE ===================== -->
+    <section class="tab-screen" id="tab-house" hidden>
+      <div class="card card-pad">
+        <div class="card-head"><h2>House Management</h2></div>
+        <div class="add-row">
+          <input type="text" id="house-new-task" placeholder="Add a task…" />
+          <button class="btn btn-primary btn-sm" id="btn-add-house-task" type="button">Add</button>
         </div>
-
-        <div class="tab-panel" id="panel-manual" role="tabpanel"></div>
-        <div class="tab-panel" id="panel-csv" role="tabpanel" hidden></div>
-        <div class="tab-panel" id="panel-photo" role="tabpanel" hidden></div>
-        <div class="tab-panel" id="panel-describe" role="tabpanel" hidden></div>
       </div>
-
-      <div class="card" id="blocks-card">
-        <div class="card-head">
-          <div><h2>Periodization blocks</h2><div class="desc">Tag mesocycles so the heat map bands your phase.</div></div>
-        </div>
-        <div class="card-body" id="blocks-body"></div>
-      </div>
-
-      <div class="card" id="settings-card" style="display:none;">
-        <div class="card-head"><h2>Settings</h2></div>
-        <div class="card-body" id="settings-body"></div>
-      </div>
-    </div>
+      <div class="card card-pad" id="house-full-list"></div>
+    </section>
   </div>
 
-  <div class="card">
-    <div class="card-head">
-      <div><h2>Session log</h2><div class="desc" id="log-count"></div></div>
-    </div>
-    <div class="table-filter">
-      <select id="filter-modality">
-        <option value="">All modalities</option>
-        <option value="run">Running</option>
-        <option value="bike">Cycling</option>
-        <option value="strength">Strength</option>
-        <option value="bjj">Jiu&nbsp;Jitsu</option>
-        <option value="other">Other</option>
-      </select>
-    </div>
-    <div class="card-body pad-0 table-scroll">
-      <table id="log-table">
-        <thead>
-          <tr><th>Date</th><th>Modality</th><th>Detail</th><th>Duration</th><th>Load</th><th>Phase</th><th></th></tr>
-        </thead>
-        <tbody id="log-tbody"></tbody>
-      </table>
-      <div class="empty-note" id="log-empty" style="display:none;">No sessions logged yet.</div>
-    </div>
+  <div class="bottom-nav" role="tablist">
+    <button class="nav-btn" data-nav="today" aria-current="true" type="button"><span class="ic">◐</span>Today</button>
+    <button class="nav-btn" data-nav="train" aria-current="false" type="button"><span class="ic">◆</span>Train</button>
+    <button class="nav-btn" data-nav="house" aria-current="false" type="button"><span class="ic">⌂</span>House</button>
   </div>
 
-  <footer class="app-foot">Load Ledger &middot; data stored privately for your account &middot; ACWR bands follow Gabbett's 0.8&ndash;1.3 sweet-spot model</footer>
+  <button class="fab" id="fab-log" type="button" aria-label="Log a session" hidden>+</button>
+
+  <!-- ===================== SHEET: log session ===================== -->
+  <div class="backdrop" id="backdrop-log" hidden></div>
+  <div class="sheet" id="sheet-log" hidden>
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2>Log a session</h2><button class="icon-btn2" data-close="sheet-log" type="button">✕</button></div>
+    <div class="tabs2" role="tablist" id="tabs">
+      <button class="tab-btn2" role="tab" data-tab="manual" aria-selected="true" type="button">Manual</button>
+      <button class="tab-btn2" role="tab" data-tab="csv" aria-selected="false" type="button">Garmin CSV</button>
+      <button class="tab-btn2" role="tab" data-tab="photo" aria-selected="false" type="button">Photo</button>
+      <button class="tab-btn2" role="tab" data-tab="describe" aria-selected="false" type="button">Describe</button>
+    </div>
+    <div class="tab-panel2" id="panel-manual" role="tabpanel"></div>
+    <div class="tab-panel2" id="panel-csv" role="tabpanel" hidden></div>
+    <div class="tab-panel2" id="panel-photo" role="tabpanel" hidden></div>
+    <div class="tab-panel2" id="panel-describe" role="tabpanel" hidden></div>
+  </div>
+
+  <!-- ===================== SHEET: blocks ===================== -->
+  <div class="backdrop" id="backdrop-blocks" hidden></div>
+  <div class="sheet" id="sheet-blocks" hidden>
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2>Periodization blocks</h2><button class="icon-btn2" data-close="sheet-blocks" type="button">✕</button></div>
+    <div id="blocks-body"></div>
+  </div>
+
+  <!-- ===================== SHEET: settings ===================== -->
+  <div class="backdrop" id="backdrop-settings" hidden></div>
+  <div class="sheet" id="sheet-settings" hidden>
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><h2>Settings</h2><button class="icon-btn2" data-close="sheet-settings" type="button">✕</button></div>
+    <div id="settings-body"></div>
+  </div>
 </div>
 
 <script>
@@ -442,11 +367,11 @@
   var MODALITIES = ["run", "bike", "strength", "bjj", "other"];
   var MOD_LABEL = { run: "Running", bike: "Cycling", strength: "Strength", bjj: "Jiu Jitsu", other: "Other" };
   var MOD_COLOR_VAR = { run: "--series-run", bike: "--series-run", strength: "--series-strength", bjj: "--series-bjj", other: "--series-bjj" };
-  var TRACKED_MODALITIES = ["run", "strength", "bjj"]; // the three shown as small multiples
+  var TRACKED_MODALITIES = ["run", "strength", "bjj"];
   var PHASES = ["Accumulation", "Intensification", "Realization", "Deload"];
   var PHASE_COLOR_VAR = { Accumulation: "--phase-accumulation", Intensification: "--phase-intensification", Realization: "--phase-realization", Deload: "--phase-deload" };
-
-  var css = function (name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); };
+  var CLICKUP_SERVER = "ClickUp";
+  var WEATHER_SERVER = "AccuWeather";
 
   /* ===================== date helpers ===================== */
   function todayISO() { return new Date().toISOString().slice(0, 10); }
@@ -455,59 +380,48 @@
   function addDays(iso, n) { var d = parseISO(iso); d.setUTCDate(d.getUTCDate() + n); return toISO(d); }
   function daysBetween(a, b) { return Math.round((parseISO(b) - parseISO(a)) / 86400000); }
   function fmtDate(iso) { var d = parseISO(iso); return d.toLocaleDateString(undefined, { month: "short", day: "numeric" }); }
-  function fmtDateFull(iso) { var d = parseISO(iso); return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" }); }
-  function weekdayIdx(iso) { return parseISO(iso).getUTCDay(); } // 0=Sun
+  function fmtDateFull(iso) { var d = parseISO(iso); return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" }); }
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
   function round1(v) { return Math.round(v * 10) / 10; }
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
 
-  /* ===================== load model (no RPE — objective inputs only) ===================== */
-  // Cardio / BJJ: Banister-style TRIMP from avg HR against the athlete's own HRR (needs profile maxHr/restHr).
-  // Strength: volume load / tonnage (sets x reps x weight) — inherently objective.
-  // Falls back to plain duration (flagged low-confidence) when HR or tonnage data isn't available.
+  /* ===================== load model (objective only — no RPE) ===================== */
   function computeSessionLoad(s, profile) {
     if (s.modality === "strength") {
       var tonnage = (s.exercises || []).reduce(function (sum, e) {
         return sum + (Number(e.sets) || 0) * (Number(e.reps) || 0) * (Number(e.weight) || 0);
       }, 0);
-      if (tonnage > 0) return { value: round1(tonnage), unit: profile.unitWeight + "·reps", method: "tonnage", confidence: "high" };
-      if (s.durationMin) return { value: s.durationMin, unit: "min (est.)", method: "duration", confidence: "low" };
-      return { value: 0, unit: "", method: "none", confidence: "none" };
+      if (tonnage > 0) return { value: round1(tonnage), unit: profile.unitWeight + "·reps", method: "tonnage" };
+      if (s.durationMin) return { value: s.durationMin, unit: "min (est.)", method: "duration" };
+      return { value: 0, unit: "", method: "none" };
     }
     if (s.avgHr && profile.restHr && profile.maxHr && profile.maxHr > profile.restHr && s.durationMin) {
       var hrr = clamp((s.avgHr - profile.restHr) / (profile.maxHr - profile.restHr), 0.05, 1.15);
-      var weight = 0.64 * Math.exp(1.92 * hrr);
-      var trimp = s.durationMin * hrr * weight;
-      return { value: round1(trimp), unit: "TRIMP", method: "trimp", confidence: "high" };
+      var w = 0.64 * Math.exp(1.92 * hrr);
+      return { value: round1(s.durationMin * hrr * w), unit: "TRIMP", method: "trimp" };
     }
-    if (s.durationMin) return { value: s.durationMin, unit: "min (est.)", method: "duration", confidence: "low" };
-    return { value: 0, unit: "", method: "none", confidence: "none" };
+    if (s.durationMin) return { value: s.durationMin, unit: "min (est.)", method: "duration" };
+    return { value: 0, unit: "", method: "none" };
   }
-
-  function modalityGroup(m) { return m === "bike" ? "run" : (m === "other" ? "bjj" : m); } // fold bike->run, other->bjj bucket for trend grouping
+  function modalityGroup(m) { return m === "bike" ? "run" : (m === "other" ? "bjj" : m); }
 
   function dailyLoadMaps(sessions, profile) {
-    var map = {}; // trackedModality -> { iso: sumLoad }
-    TRACKED_MODALITIES.forEach(function (m) { map[m] = {}; });
+    var map = {}; TRACKED_MODALITIES.forEach(function (m) { map[m] = {}; });
     sessions.forEach(function (s) {
-      var group = modalityGroup(s.modality);
-      if (!map[group]) return;
-      var load = computeSessionLoad(s, profile).value;
-      if (!load) return;
-      map[group][s.date] = (map[group][s.date] || 0) + load;
+      var g = modalityGroup(s.modality); if (!map[g]) return;
+      var load = computeSessionLoad(s, profile).value; if (!load) return;
+      map[g][s.date] = (map[g][s.date] || 0) + load;
     });
     return map;
   }
-
   function buildDateAxis(sessions) {
     var end = todayISO();
     if (!sessions.length) return { start: addDays(end, -83), end: end };
     var minDate = sessions.reduce(function (m, s) { return s.date < m ? s.date : m; }, end);
-    var start = addDays(minDate, -28); // pad so chronic window is meaningful from the first visible day
+    var start = addDays(minDate, -28);
     if (daysBetween(start, end) > 365) start = addDays(end, -365);
     return { start: start, end: end };
   }
-
   function rollingSeries(dailyMap, dates) {
     var values = dates.map(function (d) { return dailyMap[d] || 0; });
     var acute = [], chronic = [], ratio = [], firstIdx = -1;
@@ -523,13 +437,11 @@
     }
     return { values: values, acute: acute, chronic: chronic, ratio: ratio };
   }
-
   function overallComposite(perMod, dates) {
     var idx = dates.map(function (_, i) {
       var sum = 0, any = false;
       TRACKED_MODALITIES.forEach(function (m) {
-        var ser = perMod[m];
-        var val = ser.values[i], chr = ser.chronic[i];
+        var ser = perMod[m], val = ser.values[i], chr = ser.chronic[i];
         if (val > 0 && chr > 0) { sum += (val / chr) * 100; any = true; }
       });
       return any ? sum : 0;
@@ -537,97 +449,77 @@
     var map = {}; dates.forEach(function (d, i) { map[d] = idx[i]; });
     return rollingSeries(map, dates);
   }
-
   function acwrZone(r) {
     if (r === null || r === undefined) return "none";
-    if (r < 0.8) return "under";
-    if (r <= 1.3) return "optimal";
-    if (r <= 1.5) return "caution";
-    return "high";
+    if (r < 0.8) return "under"; if (r <= 1.3) return "optimal"; if (r <= 1.5) return "caution"; return "high";
   }
   var ZONE_LABEL = { under: "Undertraining", optimal: "Optimal", caution: "Caution", high: "High risk", none: "No data" };
   var ZONE_VAR = { under: "--zone-under", optimal: "--zone-optimal", caution: "--zone-caution", high: "--zone-high", none: "--zone-none" };
 
-  /* ===================== storage (db capability, falls back to localStorage) ===================== */
-  var CAP = { db: null, sample: null, downloads: null, imagesOk: false };
-  var state = { sessions: [], blocks: [], profile: { maxHr: null, restHr: null, unitDistance: "km", unitWeight: "kg" }, usingSample: false, ready: false };
-  var LS_KEYS = { sessions: "loadledger.sessions.v1", blocks: "loadledger.blocks.v1", profile: "loadledger.profile.v1" };
-
-  function lsGet(key, fallback) { try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch (e) { return fallback; } }
-  function lsSet(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+  /* ===================== storage (db capability -> localStorage fallback) ===================== */
+  var CAP = { db: null, sample: null, downloads: null, mcp: null, imagesOk: false };
+  var state = {
+    sessions: [], blocks: [],
+    profile: { maxHr: null, restHr: null, unitDistance: "km", unitWeight: "kg", dietaryNotes: "Low saturated fat", weatherLocationKey: null, weatherLocationName: null, clickupListId: "901703054128" },
+    ready: false
+  };
+  var LS_KEYS = { sessions: "homebase.sessions.v1", blocks: "homebase.blocks.v1", profile: "homebase.profile.v1" };
+  function lsGet(k, fb) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch (e) { return fb; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 
   function sampleSet() {
-    var d0 = addDays(todayISO(), 0);
+    var d0 = todayISO();
     var blocks = [
       { id: "blk-acc", name: "Base Build", phase: "Accumulation", start: addDays(d0, -56), end: addDays(d0, -29) },
       { id: "blk-int", name: "Intensify", phase: "Intensification", start: addDays(d0, -28), end: addDays(d0, -1) },
       { id: "blk-real", name: "Comp Prep", phase: "Realization", start: d0, end: addDays(d0, 27) }
     ];
     var sessions = [];
-    function push(dOff, obj) { sessions.push(Object.assign({ id: "s-" + uid(), date: addDays(d0, dOff), source: "manual", notes: "" }, obj)); }
+    function push(off, o) { sessions.push(Object.assign({ id: "s-" + uid(), date: addDays(d0, off), source: "manual", notes: "" }, o)); }
     for (var w = 8; w >= 0; w--) {
-      var base = -w * 7;
-      push(base - 6, { modality: "run", durationMin: 42, distanceKm: 8.1, avgHr: 152, maxHr: 171, elevationM: 90 });
-      push(base - 5, { modality: "strength", durationMin: 58, exercises: [{ name: "Back squat", sets: 5, reps: 5, weight: 100 }, { name: "Bench press", sets: 4, reps: 6, weight: 70 }, { name: "Barbell row", sets: 4, reps: 8, weight: 60 }] });
-      push(base - 3, { modality: "bjj", durationMin: 60, avgHr: 148, notes: "6 rounds, worked guard retention" });
-      push(base - 2, { modality: "run", durationMin: 65, distanceKm: 12.4, avgHr: 158, maxHr: 176, elevationM: 140 });
-      push(base - 1, { modality: "strength", durationMin: 50, exercises: [{ name: "Deadlift", sets: 4, reps: 4, weight: 130 }, { name: "Overhead press", sets: 4, reps: 6, weight: 45 }] });
+      var b = -w * 7;
+      push(b - 6, { modality: "run", durationMin: 42, distanceKm: 8.1, avgHr: 152 });
+      push(b - 5, { modality: "strength", durationMin: 58, exercises: [{ name: "Back squat", sets: 5, reps: 5, weight: 100 }, { name: "Bench press", sets: 4, reps: 6, weight: 70 }] });
+      push(b - 3, { modality: "bjj", durationMin: 60, avgHr: 148, notes: "6 rounds" });
+      push(b - 2, { modality: "run", durationMin: 65, distanceKm: 12.4, avgHr: 158 });
+      push(b - 1, { modality: "strength", durationMin: 50, exercises: [{ name: "Deadlift", sets: 4, reps: 4, weight: 130 }] });
     }
-    return { sessions: sessions, blocks: blocks, profile: { maxHr: 186, restHr: 52, unitDistance: "km", unitWeight: "kg" } };
+    return { sessions: sessions, blocks: blocks };
   }
 
+  var loadedOnce = false;
   function initStore() {
     return (window.claude && window.claude.use ? window.claude.use("db") : Promise.resolve(null)).then(function (db) {
       CAP.db = db;
       if (db) {
-        db.collection("sessions").onSnapshot(function (snap) {
-          state.sessions = snap.docs.map(function (d) { return d.data(); });
-          afterDataLoad();
-        }, function () { afterDataLoad(); });
-        db.collection("blocks").onSnapshot(function (snap) {
-          state.blocks = snap.docs.map(function (d) { return d.data(); });
-          afterDataLoad();
-        }, function () { afterDataLoad(); });
-        db.doc("meta/profile").onSnapshot(function (snap) {
-          if (snap.exists) state.profile = Object.assign({}, state.profile, snap.data());
-          afterDataLoad();
-        }, function () { afterDataLoad(); });
+        db.collection("sessions").onSnapshot(function (snap) { state.sessions = snap.docs.map(function (d) { return d.data(); }); afterDataLoad(); }, function () { afterDataLoad(); });
+        db.collection("blocks").onSnapshot(function (snap) { state.blocks = snap.docs.map(function (d) { return d.data(); }); afterDataLoad(); }, function () { afterDataLoad(); });
+        db.doc("meta/profile").onSnapshot(function (snap) { if (snap.exists) state.profile = Object.assign({}, state.profile, snap.data()); afterDataLoad(); }, function () { afterDataLoad(); });
       } else {
         state.sessions = lsGet(LS_KEYS.sessions, []);
         state.blocks = lsGet(LS_KEYS.blocks, []);
-        state.profile = lsGet(LS_KEYS.profile, state.profile);
+        state.profile = Object.assign({}, state.profile, lsGet(LS_KEYS.profile, {}));
         afterDataLoad();
       }
     });
   }
-
-  var loadedOnce = false;
   function afterDataLoad() {
     if (!loadedOnce) {
       loadedOnce = true;
       if (state.sessions.length === 0 && state.blocks.length === 0) {
-        var sample = sampleSet();
-        state.sessions = sample.sessions; state.blocks = sample.blocks; state.profile = sample.profile;
-        state.isSample = true;
+        var s = sampleSet(); state.sessions = s.sessions; state.blocks = s.blocks; state.isSample = true;
       }
     }
     state.ready = true;
+    onWeatherLocationMaybeReady();
     renderAll();
   }
-
-  function clearSampleIfNeeded() {
-    if (state.isSample) { state.isSample = false; state.sessions = []; state.blocks = []; }
-  }
+  function clearSampleIfNeeded() { if (state.isSample) { state.isSample = false; state.sessions = []; state.blocks = []; } }
 
   function saveSession(sess) {
     clearSampleIfNeeded();
     if (CAP.db) { CAP.db.collection("sessions").doc(sess.id).set(sess); }
-    else {
-      var i = state.sessions.findIndex(function (s) { return s.id === sess.id; });
-      if (i >= 0) state.sessions[i] = sess; else state.sessions.push(sess);
-      lsSet(LS_KEYS.sessions, state.sessions);
-      renderAll();
-    }
+    else { var i = state.sessions.findIndex(function (s) { return s.id === sess.id; }); if (i >= 0) state.sessions[i] = sess; else state.sessions.push(sess); lsSet(LS_KEYS.sessions, state.sessions); renderAll(); }
   }
   function deleteSession(id) {
     if (CAP.db) { CAP.db.collection("sessions").doc(id).delete(); }
@@ -636,748 +528,593 @@
   function saveBlock(b) {
     clearSampleIfNeeded();
     if (CAP.db) { CAP.db.collection("blocks").doc(b.id).set(b); }
-    else {
-      var i = state.blocks.findIndex(function (x) { return x.id === b.id; });
-      if (i >= 0) state.blocks[i] = b; else state.blocks.push(b);
-      lsSet(LS_KEYS.blocks, state.blocks); renderAll();
-    }
+    else { var i = state.blocks.findIndex(function (x) { return x.id === b.id; }); if (i >= 0) state.blocks[i] = b; else state.blocks.push(b); lsSet(LS_KEYS.blocks, state.blocks); renderAll(); }
   }
   function deleteBlock(id) {
     if (CAP.db) { CAP.db.collection("blocks").doc(id).delete(); }
     else { state.blocks = state.blocks.filter(function (b) { return b.id !== id; }); lsSet(LS_KEYS.blocks, state.blocks); renderAll(); }
   }
+  var prevWeatherKey = null;
   function saveProfile(p) {
     state.profile = p;
-    if (CAP.db) { CAP.db.doc("meta/profile").set(p); }
-    else { lsSet(LS_KEYS.profile, p); renderAll(); }
+    if (CAP.db) { CAP.db.doc("meta/profile").set(p); } else { lsSet(LS_KEYS.profile, p); renderAll(); }
+    onWeatherLocationMaybeReady();
   }
-
-  function blockForDate(iso) {
-    return state.blocks.find(function (b) { return iso >= b.start && iso <= b.end; }) || null;
-  }
+  function blockForDate(iso) { return state.blocks.find(function (b) { return iso >= b.start && iso <= b.end; }) || null; }
 
   /* ===================== tooltip ===================== */
   var tipEl = document.getElementById("tooltip");
   function showTip(x, y, html) {
     tipEl.innerHTML = html;
-    var pad = 14, w = 220;
-    var left = clamp(x + 12, pad, window.innerWidth - w - pad);
-    var top = clamp(y + 12, pad, window.innerHeight - pad - 60);
-    tipEl.style.left = left + "px"; tipEl.style.top = top + "px";
-    tipEl.classList.add("show");
+    var pad = 12, w = 200;
+    var left = clamp(x + 10, pad, window.innerWidth - w - pad);
+    var top = clamp(y + 10, pad, window.innerHeight - pad - 60);
+    tipEl.style.left = left + "px"; tipEl.style.top = top + "px"; tipEl.classList.add("show");
   }
   function hideTip() { tipEl.classList.remove("show"); }
 
-  /* ===================== SVG ACWR chart (shared by overall + per-modality) ===================== */
+  /* ===================== SVG ACWR chart ===================== */
   var NS = "http://www.w3.org/2000/svg";
-  function svgEl(tag, attrs) {
-    var el = document.createElementNS(NS, tag);
-    for (var k in attrs) el.setAttribute(k, attrs[k]);
-    return el;
-  }
+  function svgEl(tag, attrs) { var el = document.createElementNS(NS, tag); for (var k in attrs) el.setAttribute(k, attrs[k]); return el; }
 
   function renderAcwrChart(container, opts) {
-    // opts: dates[], ratio[], compact(bool), colorVar (series color for the line)
     container.innerHTML = "";
     var dates = opts.dates, ratio = opts.ratio;
-    var W = opts.compact ? 320 : 800, H = opts.compact ? 130 : 250;
-    var padL = opts.compact ? 26 : 34, padR = opts.compact ? 8 : 16, padT = 10, padB = opts.compact ? 16 : 24;
+    var W = 400, H = 190, padL = 28, padR = 10, padT = 10, padB = 20;
     var plotW = W - padL - padR, plotH = H - padT - padB;
     var maxVal = ratio.reduce(function (m, r) { return r !== null ? Math.max(m, r) : m; }, 1.6);
     var yMax = Math.max(1.7, Math.min(2.6, maxVal * 1.12));
     var n = dates.length;
     function X(i) { return padL + (n <= 1 ? 0 : (i / (n - 1)) * plotW); }
     function Y(v) { return padT + plotH - (clamp(v, 0, yMax) / yMax) * plotH; }
-
     var svg = svgEl("svg", { viewBox: "0 0 " + W + " " + H, class: "chart-svg", style: "width:100%; height:auto; display:block;", preserveAspectRatio: "xMidYMid meet" });
 
-    var bands = [
-      { lo: 0, hi: 0.8, v: "--zone-under" },
-      { lo: 0.8, hi: 1.3, v: "--zone-optimal" },
-      { lo: 1.3, hi: 1.5, v: "--zone-caution" },
-      { lo: 1.5, hi: yMax, v: "--zone-high" }
-    ];
-    bands.forEach(function (b) {
+    [{ lo: 0, hi: 0.8, v: "--zone-under" }, { lo: 0.8, hi: 1.3, v: "--zone-optimal" }, { lo: 1.3, hi: 1.5, v: "--zone-caution" }, { lo: 1.5, hi: yMax, v: "--zone-high" }].forEach(function (b) {
       if (b.lo >= yMax) return;
       var y1 = Y(Math.min(b.hi, yMax)), y2 = Y(b.lo);
-      svg.appendChild(svgEl("rect", { x: padL, y: y1, width: plotW, height: Math.max(0, y2 - y1), fill: "var(" + b.v + ")", opacity: "0.11" }));
+      svg.appendChild(svgEl("rect", { x: padL, y: y1, width: plotW, height: Math.max(0, y2 - y1), fill: "var(" + b.v + ")", opacity: "0.12" }));
     });
-
     [0.8, 1.3, 1.5].forEach(function (v) {
       if (v > yMax) return;
       svg.appendChild(svgEl("line", { x1: padL, x2: padL + plotW, y1: Y(v), y2: Y(v), class: "grid-line" }));
-      if (!opts.compact) {
-        var t = svgEl("text", { x: padL - 6, y: Y(v) + 3, "text-anchor": "end" });
-        t.textContent = v.toFixed(1); svg.appendChild(t);
-      }
+      var t = svgEl("text", { x: padL - 5, y: Y(v) + 3, "text-anchor": "end" }); t.textContent = v.toFixed(1); svg.appendChild(t);
     });
     svg.appendChild(svgEl("line", { x1: padL, x2: padL + plotW, y1: Y(0), y2: Y(0), class: "axis-line" }));
 
-    // line path, split across null gaps
-    var d = "", started = false;
-    var pts = [];
+    var d = "", started = false, pts = [];
     for (var i = 0; i < n; i++) {
       if (ratio[i] === null) { started = false; continue; }
       var x = X(i), y = Y(ratio[i]);
-      d += (started ? " L " : " M ") + x.toFixed(1) + " " + y.toFixed(1);
-      started = true;
-      pts.push({ i: i, x: x, y: y });
+      d += (started ? " L " : " M ") + x.toFixed(1) + " " + y.toFixed(1); started = true; pts.push({ i: i, x: x, y: y });
     }
     if (d) svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: "var(" + (opts.colorVar || "--accent") + ")", "stroke-width": "2", "stroke-linecap": "round", "stroke-linejoin": "round" }));
+    if (pts.length) { var last = pts[pts.length - 1]; svg.appendChild(svgEl("circle", { cx: last.x, cy: last.y, r: 4, fill: "var(" + (opts.colorVar || "--accent") + ")", stroke: "var(--surface)", "stroke-width": "1.5" })); }
 
-    // emphasized endpoint
-    if (pts.length) {
-      var last = pts[pts.length - 1];
-      svg.appendChild(svgEl("circle", { cx: last.x, cy: last.y, r: opts.compact ? 3 : 4, fill: "var(" + (opts.colorVar || "--accent") + ")", stroke: "var(--surface)", "stroke-width": "1.5" }));
+    for (var wI = 0; wI < n; wI += 14) {
+      svg.appendChild(svgEl("line", { x1: X(wI), x2: X(wI), y1: padT, y2: padT + plotH, class: "grid-line", opacity: "0.5" }));
+      var lbl = svgEl("text", { x: X(wI), y: H - 5, "text-anchor": "middle" }); lbl.textContent = fmtDate(dates[wI]); svg.appendChild(lbl);
     }
 
-    // week gridlines + labels on the full chart
-    if (!opts.compact) {
-      for (var wI = 0; wI < n; wI += 7) {
-        svg.appendChild(svgEl("line", { x1: X(wI), x2: X(wI), y1: padT, y2: padT + plotH, class: "grid-line", opacity: "0.5" }));
-        var lbl = svgEl("text", { x: X(wI), y: H - 6, "text-anchor": "middle" });
-        lbl.textContent = fmtDate(dates[wI]); svg.appendChild(lbl);
-      }
-    }
-
-    // hover layer
     var hit = svgEl("rect", { x: padL, y: padT, width: plotW, height: plotH, fill: "transparent" });
     svg.appendChild(hit);
-    var cross = svgEl("line", { y1: padT, y2: padT + plotH, class: "grid-line", opacity: "0", "stroke-dasharray": "0" });
-    cross.setAttribute("stroke", "var(--ink-secondary)");
+    var cross = svgEl("line", { y1: padT, y2: padT + plotH, opacity: "0" }); cross.setAttribute("stroke", "var(--ink-secondary)");
     svg.appendChild(cross);
-    hit.addEventListener("mousemove", function (ev) {
+    function onMove(clientX, clientY) {
       var rect = svg.getBoundingClientRect();
-      var relX = (ev.clientX - rect.left) / rect.width * W;
+      var relX = (clientX - rect.left) / rect.width * W;
       var i = clamp(Math.round(((relX - padL) / plotW) * (n - 1)), 0, n - 1);
       var r = ratio[i];
       cross.setAttribute("x1", X(i)); cross.setAttribute("x2", X(i)); cross.setAttribute("opacity", "1");
-      var zone = acwrZone(r);
-      var html = "<b>" + fmtDateFull(dates[i]) + "</b><br>" +
-        (r === null ? "Not enough history yet" : "ACWR " + r.toFixed(2) + " &middot; " + ZONE_LABEL[zone]);
-      showTip(ev.clientX, ev.clientY, html);
-    });
-    hit.addEventListener("mouseleave", function () { cross.setAttribute("opacity", "0"); hideTip(); });
-
-    container.appendChild(svg);
-
-    if (!opts.compact) {
-      var legend = document.createElement("div");
-      legend.className = "modality-legend";
-      legend.style.marginTop = "10px";
-      var items = [["Undertraining <0.8", "--zone-under"], ["Optimal 0.8–1.3", "--zone-optimal"], ["Caution 1.3–1.5", "--zone-caution"], ["High risk >1.5", "--zone-high"]];
-      items.forEach(function (it) {
-        var span = document.createElement("span"); span.className = "item";
-        span.innerHTML = '<span class="sw" style="background:var(' + it[1] + ')"></span>' + it[0];
-        legend.appendChild(span);
-      });
-      container.appendChild(legend);
+      showTip(clientX, clientY, "<b>" + fmtDateFull(dates[i]) + "</b><br>" + (r === null ? "Not enough history yet" : "ACWR " + r.toFixed(2) + " &middot; " + ZONE_LABEL[acwrZone(r)]));
     }
+    hit.addEventListener("mousemove", function (ev) { onMove(ev.clientX, ev.clientY); });
+    hit.addEventListener("touchstart", function (ev) { var t = ev.touches[0]; onMove(t.clientX, t.clientY); }, { passive: true });
+    hit.addEventListener("touchmove", function (ev) { var t = ev.touches[0]; onMove(t.clientX, t.clientY); }, { passive: true });
+    hit.addEventListener("mouseleave", function () { cross.setAttribute("opacity", "0"); hideTip(); });
+    hit.addEventListener("touchend", function () { cross.setAttribute("opacity", "0"); hideTip(); });
+    container.appendChild(svg);
   }
 
-  /* ===================== render: stat row ===================== */
-  function renderStats(dates, overall, perMod) {
-    var el = document.getElementById("stat-row");
+  /* ===================== TRAIN tab ===================== */
+  var trainSeg = "overall";
+  function renderTrainStats(overall, todayBlock) {
+    var el = document.getElementById("train-stats");
     var lastR = overall.ratio[overall.ratio.length - 1];
     var zone = acwrZone(lastR);
-    var todayBlock = blockForDate(todayISO());
-    var thisWeekStart = addDays(todayISO(), -6);
-    var thisWeekSessions = state.sessions.filter(function (s) { return s.date >= thisWeekStart && s.date <= todayISO(); });
-    var byMod = {};
-    thisWeekSessions.forEach(function (s) { byMod[s.modality] = (byMod[s.modality] || 0) + 1; });
-    var modChips = Object.keys(byMod).map(function (m) {
-      return '<span class="row-mod"><span class="sw" style="background:var(' + MOD_COLOR_VAR[m] + ')"></span>' + byMod[m] + ' ' + MOD_LABEL[m] + '</span>';
-    }).join(" &nbsp; ") || "None yet";
-
     var weekIdx = todayBlock ? Math.floor(daysBetween(todayBlock.start, todayISO()) / 7) + 1 : null;
     var totalWeeks = todayBlock ? Math.ceil((daysBetween(todayBlock.start, todayBlock.end) + 1) / 7) : null;
-
     el.innerHTML =
-      '<div class="tile"><div class="label">Overall ACWR</div><div class="value num">' + (lastR === null ? "&ndash;" : lastR.toFixed(2)) + '</div>' +
-      '<div class="sub"><span class="pill pill-' + zone + '"><span class="dot"></span>' + ZONE_LABEL[zone] + '</span></div></div>' +
-
-      '<div class="tile"><div class="label">Current phase</div><div class="value" style="font-size:22px;">' + (todayBlock ? todayBlock.phase : "Unassigned") + '</div>' +
-      '<div class="sub">' + (todayBlock ? (todayBlock.name + " &middot; week " + weekIdx + " of " + totalWeeks) : "Add a block below") + '</div></div>' +
-
-      '<div class="tile"><div class="label">This week</div><div class="value num">' + thisWeekSessions.length + '</div>' +
-      '<div class="sub">' + modChips + '</div></div>' +
-
-      '<div class="tile"><div class="label">Logged sessions</div><div class="value num">' + state.sessions.length + '</div>' +
-      '<div class="sub">since ' + (state.sessions.length ? fmtDate(state.sessions.reduce(function (m, s) { return s.date < m ? s.date : m; }, todayISO())) : "&mdash;") + '</div></div>';
+      '<div class="tile2"><div class="label">Overall ACWR</div><div class="value num">' + (lastR === null ? "–" : lastR.toFixed(2)) + '</div><div class="sub"><span class="pill pill-' + zone + '"><span class="dot"></span>' + ZONE_LABEL[zone] + '</span></div></div>' +
+      '<div class="tile2"><div class="label">Phase</div><div class="value" style="font-size:19px;">' + (todayBlock ? todayBlock.phase : "None") + '</div><div class="sub">' + (todayBlock ? ("wk " + weekIdx + "/" + totalWeeks) : "no active block") + '</div></div>';
+  }
+  function renderTrainSeg(perMod) {
+    var el = document.getElementById("train-seg");
+    var opts = [["overall", "Overall"], ["run", "Run"], ["strength", "Strength"], ["bjj", "BJJ"]];
+    el.innerHTML = opts.map(function (o) { return '<button type="button" data-seg="' + o[0] + '" aria-selected="' + (trainSeg === o[0]) + '">' + o[1] + '</button>'; }).join("");
+    el.querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { trainSeg = b.getAttribute("data-seg"); renderTrainChartSection(perMod); }); });
+  }
+  var lastPerMod = null, lastOverall = null, lastDates = null;
+  function renderTrainChartSection(perMod) {
+    var host = document.getElementById("train-chart");
+    var legend = document.getElementById("train-legend");
+    var ratio, colorVar;
+    if (trainSeg === "overall") { ratio = lastOverall.ratio; colorVar = "--accent"; }
+    else { ratio = perMod[trainSeg].ratio; colorVar = MOD_COLOR_VAR[trainSeg]; }
+    renderAcwrChart(host, { dates: lastDates, ratio: ratio, colorVar: colorVar });
+    legend.innerHTML = [["Under <0.8", "--zone-under"], ["Optimal 0.8–1.3", "--zone-optimal"], ["Caution 1.3–1.5", "--zone-caution"], ["High >1.5", "--zone-high"]]
+      .map(function (it) { return '<span class="item"><span class="sw" style="background:var(' + it[1] + ')"></span>' + it[0] + '</span>'; }).join("");
+    document.querySelectorAll("#train-seg button").forEach(function (b) { b.setAttribute("aria-selected", b.getAttribute("data-seg") === trainSeg ? "true" : "false"); });
   }
 
-  /* ===================== render: mini per-modality charts ===================== */
-  function renderMiniGrid(dates, perMod) {
-    var el = document.getElementById("mini-grid"); el.innerHTML = "";
-    TRACKED_MODALITIES.forEach(function (m) {
-      var ser = perMod[m];
-      var lastR = ser.ratio[ser.ratio.length - 1];
-      var zone = acwrZone(lastR);
-      var card = document.createElement("div"); card.className = "mini-card";
-      card.innerHTML =
-        '<div class="mini-head"><span class="mini-title"><span class="sw" style="width:9px;height:9px;border-radius:3px;background:var(' + MOD_COLOR_VAR[m] + ');display:inline-block;"></span>' + MOD_LABEL[m] + (m === "run" ? " / Cycling" : m === "bjj" ? " / Other" : "") + '</span>' +
-        '<span class="mini-ratio">' + (lastR === null ? "&ndash;" : lastR.toFixed(2)) + '</span></div>';
-      var chartHost = document.createElement("div");
-      card.appendChild(chartHost);
-      var pillWrap = document.createElement("div"); pillWrap.style.margin = "4px 0 6px";
-      pillWrap.innerHTML = '<span class="pill pill-' + zone + '" style="font-size:10.5px;"><span class="dot"></span>' + ZONE_LABEL[zone] + '</span>';
-      card.appendChild(pillWrap);
-      el.appendChild(card);
-      renderAcwrChart(chartHost, { dates: dates, ratio: ser.ratio, compact: true, colorVar: MOD_COLOR_VAR[m] });
-    });
-  }
-
-  /* ===================== render: heatmap ===================== */
-  function renderHeatmap(dates, overallRatioByDate) {
+  function renderHeatmap(overallByDate) {
     var wrap = document.getElementById("heatmap-wrap"); wrap.innerHTML = "";
-    var weeks = 20;
-    var end = todayISO();
-    var endWk = parseISO(end); endWk.setUTCDate(endWk.getUTCDate() - endWk.getUTCDay()); // Sunday of current week
+    var weeks = 10, end = todayISO();
+    var endWk = parseISO(end); endWk.setUTCDate(endWk.getUTCDate() - endWk.getUTCDay());
     var startIso = addDays(toISO(endWk), -7 * (weeks - 1));
-    var cols = [];
-    for (var w = 0; w < weeks; w++) {
-      var wkStart = addDays(startIso, w * 7);
-      var days = [];
-      for (var d = 0; d < 7; d++) days.push(addDays(wkStart, d));
-      cols.push({ start: wkStart, days: days });
-    }
-
+    var cols = []; for (var w = 0; w < weeks; w++) { var wkStart = addDays(startIso, w * 7); var days = []; for (var d = 0; d < 7; d++) days.push(addDays(wkStart, d)); cols.push({ start: wkStart, days: days }); }
     var dayNames = document.createElement("div"); dayNames.className = "heat-daynames";
     ["S", "M", "T", "W", "T", "F", "S"].forEach(function (n) { var s = document.createElement("div"); s.textContent = n; dayNames.appendChild(s); });
-
     var col = document.createElement("div");
-
     var band = document.createElement("div"); band.className = "phase-band";
-    cols.forEach(function (c) {
-      var mid = addDays(c.start, 3);
-      var b = blockForDate(mid);
-      var cell = document.createElement("div"); cell.className = "phase-cell";
-      cell.style.background = b ? "var(" + PHASE_COLOR_VAR[b.phase] + ")" : "transparent";
-      cell.title = b ? (b.name + " — " + b.phase) : "";
-      band.appendChild(cell);
-    });
+    cols.forEach(function (c) { var mid = addDays(c.start, 3); var b = blockForDate(mid); var cell = document.createElement("div"); cell.className = "phase-cell"; cell.style.background = b ? "var(" + PHASE_COLOR_VAR[b.phase] + ")" : "transparent"; band.appendChild(cell); });
     col.appendChild(band);
-
     var grid = document.createElement("div"); grid.className = "heat-grid";
     cols.forEach(function (c) {
       c.days.forEach(function (iso) {
-        var cell = document.createElement("div");
-        cell.className = "heat-cell";
-        cell.tabIndex = 0;
-        if (iso <= end && overallRatioByDate.hasOwnProperty(iso)) {
-          var r = overallRatioByDate[iso];
-          var zone = acwrZone(r);
-          if (zone !== "none") {
-            cell.classList.add("has-data");
-            cell.style.background = "var(" + ZONE_VAR[zone] + ")";
-          }
-          var sessOnDay = state.sessions.filter(function (s) { return s.date === iso; });
-          var onInfo = function (ev) {
-            var html = "<b>" + fmtDateFull(iso) + "</b><br>" + (r === null ? "Not enough history yet" : "ACWR " + r.toFixed(2) + " &middot; " + ZONE_LABEL[zone]);
-            if (sessOnDay.length) html += "<br>" + sessOnDay.map(function (s) { return MOD_LABEL[s.modality]; }).join(", ");
-            showTip(ev.clientX !== undefined ? ev.clientX : cell.getBoundingClientRect().left, ev.clientY !== undefined ? ev.clientY : cell.getBoundingClientRect().top, html);
-          };
-          cell.addEventListener("mousemove", onInfo);
-          cell.addEventListener("focus", onInfo);
-          cell.addEventListener("mouseleave", hideTip);
-          cell.addEventListener("blur", hideTip);
-        } else if (iso > end) {
-          cell.style.visibility = "hidden";
-        }
+        var cell = document.createElement("div"); cell.className = "heat-cell";
+        if (iso <= end && overallByDate.hasOwnProperty(iso)) {
+          var r = overallByDate[iso], zone = acwrZone(r);
+          if (zone !== "none") { cell.classList.add("has-data"); cell.style.background = "var(" + ZONE_VAR[zone] + ")"; }
+          cell.addEventListener("touchstart", function (ev) { var t = ev.touches[0]; showTip(t.clientX, t.clientY, "<b>" + fmtDateFull(iso) + "</b><br>" + (r === null ? "Not enough history" : "ACWR " + r.toFixed(2))); }, { passive: true });
+          cell.addEventListener("mousemove", function (ev) { showTip(ev.clientX, ev.clientY, "<b>" + fmtDateFull(iso) + "</b><br>" + (r === null ? "Not enough history" : "ACWR " + r.toFixed(2))); });
+          cell.addEventListener("mouseleave", hideTip); cell.addEventListener("touchend", hideTip);
+        } else if (iso > end) { cell.style.visibility = "hidden"; }
         grid.appendChild(cell);
       });
     });
     col.appendChild(grid);
-
-    var row = document.createElement("div"); row.className = "heat-row-wrap";
-    row.appendChild(dayNames); row.appendChild(col);
+    var row = document.createElement("div"); row.className = "heat-row-wrap"; row.appendChild(dayNames); row.appendChild(col);
     wrap.appendChild(row);
-
     var legend = document.createElement("div"); legend.className = "heat-legend";
-    [["Undertraining", "--zone-under"], ["Optimal", "--zone-optimal"], ["Caution", "--zone-caution"], ["High risk", "--zone-high"], ["No data", "--zone-none"]].forEach(function (it) {
-      var span = document.createElement("span"); span.className = "item";
-      span.innerHTML = '<span class="sw" style="background:var(' + it[1] + ')"></span>' + it[0];
-      legend.appendChild(span);
-    });
-    var phaseLegend = document.createElement("div"); phaseLegend.className = "heat-legend"; phaseLegend.style.marginTop = "2px";
-    PHASES.forEach(function (p) {
-      var span = document.createElement("span"); span.className = "item";
-      span.innerHTML = '<span class="sw" style="background:var(' + PHASE_COLOR_VAR[p] + ')"></span>' + p;
-      phaseLegend.appendChild(span);
-    });
-    wrap.appendChild(legend); wrap.appendChild(phaseLegend);
+    [["Under", "--zone-under"], ["Optimal", "--zone-optimal"], ["Caution", "--zone-caution"], ["High", "--zone-high"]].forEach(function (it) { var s = document.createElement("span"); s.className = "item"; s.innerHTML = '<span class="sw" style="background:var(' + it[1] + ')"></span>' + it[0]; legend.appendChild(s); });
+    wrap.appendChild(legend);
   }
 
-  /* ===================== render: session table ===================== */
+  var showAllSessions = false;
   function sessionDetail(s) {
-    if (s.modality === "strength") {
-      var n = (s.exercises || []).length;
-      return n ? n + " exercise" + (n === 1 ? "" : "s") : (s.notes || "—");
-    }
-    if (s.modality === "run" || s.modality === "bike") {
-      return (s.distanceKm ? s.distanceKm + " km" : "") + (s.avgHr ? " &middot; " + s.avgHr + " bpm avg" : "");
-    }
-    return s.notes ? (s.notes.length > 60 ? s.notes.slice(0, 60) + "…" : s.notes) : "—";
+    if (s.modality === "strength") { var n = (s.exercises || []).length; return n ? n + " ex" : (s.notes || "—"); }
+    if (s.modality === "run" || s.modality === "bike") return (s.distanceKm ? s.distanceKm + " km" : "");
+    return s.notes ? (s.notes.length > 34 ? s.notes.slice(0, 34) + "…" : s.notes) : "—";
   }
-
-  function renderTable() {
-    var filter = document.getElementById("filter-modality").value;
-    var rows = state.sessions.filter(function (s) { return !filter || s.modality === filter; }).sort(function (a, b) { return b.date < a.date ? -1 : 1; });
-    var tbody = document.getElementById("log-tbody"); tbody.innerHTML = "";
-    document.getElementById("log-empty").style.display = rows.length ? "none" : "block";
-    document.getElementById("log-count").textContent = state.sessions.length + " session" + (state.sessions.length === 1 ? "" : "s") + " logged";
-    rows.forEach(function (s) {
+  function renderSessionList() {
+    var el = document.getElementById("session-list");
+    var sorted = state.sessions.slice().sort(function (a, b) { return b.date < a.date ? -1 : 1; });
+    var rows = showAllSessions ? sorted : sorted.slice(0, 5);
+    document.getElementById("btn-toggle-sessions").textContent = showAllSessions ? "Show less" : "Show all";
+    if (!rows.length) { el.innerHTML = '<div class="empty-note">No sessions yet.</div>'; return; }
+    el.innerHTML = rows.map(function (s) {
       var load = computeSessionLoad(s, state.profile);
-      var b = blockForDate(s.date);
-      var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td class=\"mono\">" + fmtDate(s.date) + "</td>" +
-        "<td><span class=\"row-mod\"><span class=\"sw\" style=\"background:var(" + MOD_COLOR_VAR[s.modality] + ")\"></span>" + MOD_LABEL[s.modality] + "</span></td>" +
-        "<td>" + sessionDetail(s) + "</td>" +
-        "<td class=\"mono\">" + (s.durationMin ? s.durationMin + " min" : "—") + "</td>" +
-        "<td class=\"mono\">" + (load.value ? load.value + " " + load.unit : "—") + "</td>" +
-        "<td>" + (b ? b.phase : "—") + "</td>" +
-        "<td><button class=\"icon-btn\" title=\"Delete\" data-del=\"" + s.id + "\">✕</button></td>";
-      tbody.appendChild(tr);
-    });
+      return '<div class="sess-row"><span class="sw" style="background:var(' + MOD_COLOR_VAR[s.modality] + ')"></span><span class="d mono">' + fmtDate(s.date) + '</span><span class="info">' + MOD_LABEL[s.modality] + (sessionDetail(s) !== "—" ? " · " + sessionDetail(s) : "") + '</span><span class="ld mono">' + (load.value ? load.value : "—") + '</span></div>';
+    }).join("");
   }
+  document.getElementById("btn-toggle-sessions").addEventListener("click", function () { showAllSessions = !showAllSessions; renderSessionList(); });
 
-  /* ===================== render: blocks panel ===================== */
+  /* ===================== blocks sheet ===================== */
   function renderBlocks() {
     var body = document.getElementById("blocks-body");
     var listHtml = state.blocks.slice().sort(function (a, b) { return a.start < b.start ? -1 : 1; }).map(function (b) {
-      return '<div class="block-item"><span class="block-chip" style="background:var(' + PHASE_COLOR_VAR[b.phase] + ')"></span>' +
-        '<div class="meta"><div class="name">' + b.name + ' <span style="color:var(--muted); font-weight:400;">&middot; ' + b.phase + '</span></div>' +
-        '<div class="dates">' + fmtDate(b.start) + ' – ' + fmtDate(b.end) + '</div></div>' +
-        '<button class="icon-btn" title="Delete block" data-delblock="' + b.id + '">✕</button></div>';
-    }).join("") || '<div class="empty-note" style="padding:6px 0;">No blocks yet.</div>';
-
+      return '<div class="block-item"><span class="block-chip" style="background:var(' + PHASE_COLOR_VAR[b.phase] + ')"></span><div class="meta"><div class="name">' + b.name + ' <span style="color:var(--muted); font-weight:400;">· ' + b.phase + '</span></div><div class="dates">' + fmtDate(b.start) + ' – ' + fmtDate(b.end) + '</div></div><button class="icon-btn3" data-delblock="' + b.id + '">✕</button></div>';
+    }).join("") || '<div class="empty-note">No blocks yet.</div>';
     body.innerHTML = listHtml +
-      '<div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border);">' +
-      '<div class="field"><label for="blk-name">Block name</label><input type="text" id="blk-name" placeholder="e.g. Base Build" /></div>' +
-      '<div class="field-row">' +
-      '<div class="field"><label for="blk-phase">Phase</label><select id="blk-phase">' + PHASES.map(function (p) { return '<option>' + p + '</option>'; }).join("") + '</select></div>' +
-      '<div class="field"><label for="blk-start">Start</label><input type="date" id="blk-start" value="' + todayISO() + '" /></div>' +
-      '</div>' +
-      '<div class="field"><label for="blk-end">End</label><input type="date" id="blk-end" /></div>' +
-      '<button class="btn btn-primary btn-sm" id="btn-add-block" type="button" style="width:100%;">Add block</button></div>';
-
+      '<div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">' +
+      '<div class="field"><label>Block name</label><input type="text" id="blk-name" placeholder="e.g. Base Build" /></div>' +
+      '<div class="field-row"><div class="field"><label>Phase</label><select id="blk-phase">' + PHASES.map(function (p) { return "<option>" + p + "</option>"; }).join("") + '</select></div><div class="field"><label>Start</label><input type="date" id="blk-start" value="' + todayISO() + '" /></div></div>' +
+      '<div class="field"><label>End</label><input type="date" id="blk-end" /></div>' +
+      '<button class="btn btn-primary btn-block" id="btn-add-block" type="button">Add block</button></div>';
     document.getElementById("btn-add-block").addEventListener("click", function () {
       var name = document.getElementById("blk-name").value.trim();
-      var start = document.getElementById("blk-start").value;
-      var end = document.getElementById("blk-end").value;
+      var start = document.getElementById("blk-start").value, end = document.getElementById("blk-end").value;
       if (!name || !start || !end || end < start) { alert("Give the block a name, plus a valid start and end date."); return; }
       saveBlock({ id: "blk-" + uid(), name: name, phase: document.getElementById("blk-phase").value, start: start, end: end });
     });
-    body.querySelectorAll("[data-delblock]").forEach(function (btn) {
-      btn.addEventListener("click", function () { deleteBlock(btn.getAttribute("data-delblock")); });
-    });
+    body.querySelectorAll("[data-delblock]").forEach(function (btn) { btn.addEventListener("click", function () { deleteBlock(btn.getAttribute("data-delblock")); }); });
   }
 
-  /* ===================== settings panel ===================== */
+  /* ===================== settings sheet ===================== */
   function renderSettings() {
     var body = document.getElementById("settings-body");
     var p = state.profile;
     body.innerHTML =
-      '<div class="hint" style="margin-bottom:10px;">Max &amp; resting heart rate drive the objective TRIMP load for running / cycling / jiu jitsu. No RPE anywhere &mdash; strength load comes from tonnage instead.</div>' +
-      '<div class="field-row">' +
-      '<div class="field"><label for="set-maxhr">Max HR (bpm)</label><input type="number" id="set-maxhr" value="' + (p.maxHr || "") + '" /></div>' +
-      '<div class="field"><label for="set-resthr">Resting HR (bpm)</label><input type="number" id="set-resthr" value="' + (p.restHr || "") + '" /></div>' +
-      '</div>' +
-      '<div class="field-row">' +
-      '<div class="field"><label for="set-dist">Distance unit</label><select id="set-dist"><option value="km"' + (p.unitDistance === "km" ? " selected" : "") + '>km</option><option value="mi"' + (p.unitDistance === "mi" ? " selected" : "") + '>mi</option></select></div>' +
-      '<div class="field"><label for="set-wt">Load unit</label><select id="set-wt"><option value="kg"' + (p.unitWeight === "kg" ? " selected" : "") + '>kg</option><option value="lb"' + (p.unitWeight === "lb" ? " selected" : "") + '>lb</option></select></div>' +
-      '</div>' +
-      '<button class="btn btn-primary btn-sm" id="btn-save-settings" type="button" style="width:100%;">Save settings</button>';
+      '<div class="section-title" style="margin-top:0;">Training</div>' +
+      '<div class="hint" style="margin-bottom:8px;">Max &amp; resting HR drive TRIMP load for running/cycling/BJJ. No RPE anywhere — strength load comes from tonnage.</div>' +
+      '<div class="field-row"><div class="field"><label>Max HR</label><input type="number" id="set-maxhr" value="' + (p.maxHr || "") + '" /></div><div class="field"><label>Resting HR</label><input type="number" id="set-resthr" value="' + (p.restHr || "") + '" /></div></div>' +
+      '<div class="field-row"><div class="field"><label>Distance unit</label><select id="set-dist"><option value="km"' + (p.unitDistance === "km" ? " selected" : "") + '>km</option><option value="mi"' + (p.unitDistance === "mi" ? " selected" : "") + '>mi</option></select></div><div class="field"><label>Load unit</label><select id="set-wt"><option value="kg"' + (p.unitWeight === "kg" ? " selected" : "") + '>kg</option><option value="lb"' + (p.unitWeight === "lb" ? " selected" : "") + '>lb</option></select></div></div>' +
+
+      '<div class="section-title">Dietary guideline</div>' +
+      '<div class="field"><input type="text" id="set-diet" value="' + (p.dietaryNotes || "") + '" placeholder="e.g. Low saturated fat" /></div>' +
+      '<div class="hint" style="margin-top:-6px; margin-bottom:10px;">Primes the Ask box on Today so recipe/food questions respect this automatically.</div>' +
+
+      '<div class="section-title">Weather location</div>' +
+      '<div class="hint" style="margin-bottom:6px;">Current: ' + (p.weatherLocationName || "not set") + '</div>' +
+      '<div class="loc-row"><input type="text" id="set-loc-query" placeholder="City, state or zip" /><button class="btn btn-sm" id="btn-loc-search" type="button">Search</button></div>' +
+      '<div class="loc-results" id="loc-results"></div>' +
+
+      '<div class="section-title">ClickUp list</div>' +
+      '<div class="field"><label>House list ID</label><input type="text" id="set-clickup-list" value="' + (p.clickupListId || "") + '" /></div>' +
+      '<div class="hint" style="margin-top:-6px;">Defaults to your "House Management" list.</div>' +
+
+      '<button class="btn btn-primary btn-block" id="btn-save-settings" type="button" style="margin-top:14px;">Save settings</button>';
+
     document.getElementById("btn-save-settings").addEventListener("click", function () {
       saveProfile({
         maxHr: Number(document.getElementById("set-maxhr").value) || null,
         restHr: Number(document.getElementById("set-resthr").value) || null,
         unitDistance: document.getElementById("set-dist").value,
-        unitWeight: document.getElementById("set-wt").value
+        unitWeight: document.getElementById("set-wt").value,
+        dietaryNotes: document.getElementById("set-diet").value.trim(),
+        weatherLocationKey: state.profile.weatherLocationKey,
+        weatherLocationName: state.profile.weatherLocationName,
+        clickupListId: document.getElementById("set-clickup-list").value.trim() || state.profile.clickupListId
       });
+      closeSheet("sheet-settings");
+    });
+    document.getElementById("btn-loc-search").addEventListener("click", function () {
+      if (!CAP.mcp) { document.getElementById("loc-results").innerHTML = '<div class="banner warn">Weather connector is not available right now.</div>'; return; }
+      var q = document.getElementById("set-loc-query").value.trim(); if (!q) return;
+      var out = document.getElementById("loc-results"); out.innerHTML = "Searching…";
+      CAP.mcp.callTool(WEATHER_SERVER, "widgets-search-claude", { query: q }).then(function (res) {
+        var results = (res.payload && res.payload.results) || [];
+        if (!results.length) { out.innerHTML = '<div class="hint">No matches — try a zip code.</div>'; return; }
+        out.innerHTML = results.slice(0, 5).map(function (r) { return '<div class="loc-result"><span>' + r.name + '</span><button class="btn btn-sm" data-key="' + r.locationKey + '" data-name="' + r.name.replace(/"/g, "&quot;") + '">Use</button></div>'; }).join("");
+        out.querySelectorAll("[data-key]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            state.profile = Object.assign({}, state.profile, { weatherLocationKey: btn.getAttribute("data-key"), weatherLocationName: btn.getAttribute("data-name") });
+            saveProfile(state.profile);
+            renderSettings();
+          });
+        });
+      }).catch(function (e) { out.innerHTML = '<div class="banner err">' + mcpErrCopy(e) + '</div>'; });
     });
   }
 
-  /* ===================== quick add: manual form ===================== */
+  /* ===================== quick add: manual / csv / photo / describe (unchanged logic, new host) ===================== */
   function exerciseRowHtml(ex) {
     ex = ex || {};
-    return '<div class="exercise-row">' +
-      '<input type="text" placeholder="Exercise" class="ex-name" value="' + (ex.name || "") + '" />' +
-      '<input type="number" placeholder="Sets" class="ex-sets" value="' + (ex.sets || "") + '" />' +
-      '<input type="number" placeholder="Reps" class="ex-reps" value="' + (ex.reps || "") + '" />' +
-      '<input type="number" placeholder="Weight" class="ex-weight" value="' + (ex.weight || "") + '" />' +
-      '<button type="button" class="icon-btn ex-remove" title="Remove">✕</button></div>';
+    return '<div class="exercise-row"><input type="text" placeholder="Exercise" class="ex-name" value="' + (ex.name || "") + '" /><input type="number" placeholder="Sets" class="ex-sets" value="' + (ex.sets || "") + '" /><input type="number" placeholder="Reps" class="ex-reps" value="' + (ex.reps || "") + '" /><input type="number" placeholder="Wt" class="ex-weight" value="' + (ex.weight || "") + '" /><button type="button" class="icon-btn3 ex-remove">✕</button></div>';
   }
-
   function renderManualPanel(prefill) {
-    var panel = document.getElementById("panel-manual");
-    var g = prefill || {};
+    var panel = document.getElementById("panel-manual"); var g = prefill || {};
     panel.innerHTML =
       (prefill && prefill._banner ? '<div class="banner">' + prefill._banner + '</div>' : "") +
-      '<div class="field-row">' +
-      '<div class="field"><label for="m-date">Date</label><input type="date" id="m-date" value="' + (g.date || todayISO()) + '" /></div>' +
-      '<div class="field"><label for="m-mod">Modality</label><select id="m-mod">' +
-      MODALITIES.map(function (m) { return '<option value="' + m + '"' + (g.modality === m ? " selected" : "") + '>' + MOD_LABEL[m] + '</option>'; }).join("") +
-      '</select></div></div>' +
-      '<div class="field"><label for="m-dur">Duration (min)</label><input type="number" id="m-dur" value="' + (g.durationMin || "") + '" /></div>' +
+      '<div class="field-row"><div class="field"><label>Date</label><input type="date" id="m-date" value="' + (g.date || todayISO()) + '" /></div><div class="field"><label>Modality</label><select id="m-mod">' + MODALITIES.map(function (m) { return '<option value="' + m + '"' + (g.modality === m ? " selected" : "") + '>' + MOD_LABEL[m] + '</option>'; }).join("") + '</select></div></div>' +
+      '<div class="field"><label>Duration (min)</label><input type="number" id="m-dur" value="' + (g.durationMin || "") + '" /></div>' +
       '<div id="m-dynamic"></div>' +
-      '<div class="field"><label for="m-notes">Notes</label><textarea id="m-notes">' + (g.notes || "") + '</textarea></div>' +
-      '<button class="btn btn-primary" id="btn-save-manual" type="button" style="width:100%;">Save session</button>';
-
+      '<div class="field"><label>Notes</label><textarea id="m-notes">' + (g.notes || "") + '</textarea></div>' +
+      '<button class="btn btn-primary btn-block" id="btn-save-manual" type="button">Save session</button>';
     var dyn = document.getElementById("m-dynamic");
     function renderDynamic() {
       var mod = document.getElementById("m-mod").value;
       if (mod === "strength") {
         var exs = g.exercises && g.exercises.length ? g.exercises : [{}];
-        dyn.innerHTML = '<label style="display:block; font-size:12px; font-weight:600; color:var(--ink-secondary); margin-bottom:4px;">Exercises</label>' +
-          '<div id="ex-list">' + exs.map(exerciseRowHtml).join("") + '</div>' +
-          '<button type="button" class="btn btn-sm btn-ghost" id="btn-add-ex">+ Add exercise</button>' +
-          '<div class="tonnage-readout">Tonnage: <span class="num" id="tonnage-val">0</span> ' + state.profile.unitWeight + '·reps</div>';
-        function bindExRows() {
-          dyn.querySelectorAll(".ex-remove").forEach(function (b) { b.onclick = function () { b.closest(".exercise-row").remove(); updateTonnage(); }; });
-          dyn.querySelectorAll(".exercise-row input").forEach(function (inp) { inp.oninput = updateTonnage; });
-        }
-        function updateTonnage() {
-          var t = 0;
-          dyn.querySelectorAll(".exercise-row").forEach(function (row) {
-            var s = Number(row.querySelector(".ex-sets").value) || 0;
-            var r = Number(row.querySelector(".ex-reps").value) || 0;
-            var w = Number(row.querySelector(".ex-weight").value) || 0;
-            t += s * r * w;
-          });
-          var tv = document.getElementById("tonnage-val"); if (tv) tv.textContent = round1(t);
-        }
-        document.getElementById("btn-add-ex").onclick = function () {
-          document.getElementById("ex-list").insertAdjacentHTML("beforeend", exerciseRowHtml());
-          bindExRows();
-        };
+        dyn.innerHTML = '<label style="display:block; font-size:12px; font-weight:600; color:var(--ink-secondary); margin-bottom:4px;">Exercises</label><div id="ex-list">' + exs.map(exerciseRowHtml).join("") + '</div><button type="button" class="btn btn-sm btn-ghost" id="btn-add-ex" style="border:1px solid var(--border-strong);">+ Add exercise</button><div class="tonnage-readout">Tonnage: <span class="num" id="tonnage-val">0</span> ' + state.profile.unitWeight + '·reps</div>';
+        function bindExRows() { dyn.querySelectorAll(".ex-remove").forEach(function (b) { b.onclick = function () { b.closest(".exercise-row").remove(); updateTonnage(); }; }); dyn.querySelectorAll(".exercise-row input").forEach(function (inp) { inp.oninput = updateTonnage; }); }
+        function updateTonnage() { var t = 0; dyn.querySelectorAll(".exercise-row").forEach(function (row) { t += (Number(row.querySelector(".ex-sets").value) || 0) * (Number(row.querySelector(".ex-reps").value) || 0) * (Number(row.querySelector(".ex-weight").value) || 0); }); var tv = document.getElementById("tonnage-val"); if (tv) tv.textContent = round1(t); }
+        document.getElementById("btn-add-ex").onclick = function () { document.getElementById("ex-list").insertAdjacentHTML("beforeend", exerciseRowHtml()); bindExRows(); };
         bindExRows(); updateTonnage();
       } else if (mod === "run" || mod === "bike") {
-        dyn.innerHTML = '<div class="field-row3">' +
-          '<div class="field"><label for="m-dist">Distance (' + state.profile.unitDistance + ')</label><input type="number" step="0.1" id="m-dist" value="' + (g.distanceKm || "") + '" /></div>' +
-          '<div class="field"><label for="m-hr">Avg HR</label><input type="number" id="m-hr" value="' + (g.avgHr || "") + '" /></div>' +
-          '<div class="field"><label for="m-elev">Elev gain (m)</label><input type="number" id="m-elev" value="' + (g.elevationM || "") + '" /></div></div>' +
-          (state.profile.maxHr && state.profile.restHr ? "" : '<div class="hint">Add max/resting HR in Settings to get a TRIMP-based load instead of a duration estimate.</div>');
+        dyn.innerHTML = '<div class="field-row"><div class="field"><label>Distance (' + state.profile.unitDistance + ')</label><input type="number" step="0.1" id="m-dist" value="' + (g.distanceKm || "") + '" /></div><div class="field"><label>Avg HR</label><input type="number" id="m-hr" value="' + (g.avgHr || "") + '" /></div></div>' + (state.profile.maxHr && state.profile.restHr ? "" : '<div class="hint">Add max/resting HR in Settings for a TRIMP-based load.</div>');
       } else {
-        dyn.innerHTML = '<div class="field"><label for="m-hr">Avg HR (optional)</label><input type="number" id="m-hr" value="' + (g.avgHr || "") + '" /></div>';
+        dyn.innerHTML = '<div class="field"><label>Avg HR (optional)</label><input type="number" id="m-hr" value="' + (g.avgHr || "") + '" /></div>';
       }
     }
-    document.getElementById("m-mod").addEventListener("change", renderDynamic);
-    renderDynamic();
-
+    document.getElementById("m-mod").addEventListener("change", renderDynamic); renderDynamic();
     document.getElementById("btn-save-manual").addEventListener("click", function () {
       var mod = document.getElementById("m-mod").value;
-      var sess = {
-        id: g.id || ("s-" + uid()),
-        date: document.getElementById("m-date").value || todayISO(),
-        modality: mod,
-        durationMin: Number(document.getElementById("m-dur").value) || null,
-        notes: document.getElementById("m-notes").value.trim(),
-        source: g.source || "manual"
-      };
+      var sess = { id: g.id || ("s-" + uid()), date: document.getElementById("m-date").value || todayISO(), modality: mod, durationMin: Number(document.getElementById("m-dur").value) || null, notes: document.getElementById("m-notes").value.trim(), source: g.source || "manual" };
       if (mod === "strength") {
         var exercises = [];
         panel.querySelectorAll(".exercise-row").forEach(function (row) {
-          var name = row.querySelector(".ex-name").value.trim();
-          var sets = Number(row.querySelector(".ex-sets").value) || 0;
-          var reps = Number(row.querySelector(".ex-reps").value) || 0;
-          var weight = Number(row.querySelector(".ex-weight").value) || 0;
+          var name = row.querySelector(".ex-name").value.trim(), sets = Number(row.querySelector(".ex-sets").value) || 0, reps = Number(row.querySelector(".ex-reps").value) || 0, weight = Number(row.querySelector(".ex-weight").value) || 0;
           if (name || sets || reps || weight) exercises.push({ name: name, sets: sets, reps: reps, weight: weight });
         });
         sess.exercises = exercises;
       } else if (mod === "run" || mod === "bike") {
-        sess.distanceKm = Number(document.getElementById("m-dist").value) || null;
-        sess.avgHr = Number(document.getElementById("m-hr").value) || null;
-        sess.elevationM = Number(document.getElementById("m-elev").value) || null;
-      } else {
-        var hrEl = document.getElementById("m-hr");
-        sess.avgHr = hrEl ? (Number(hrEl.value) || null) : null;
-      }
-      saveSession(sess);
-      renderManualPanel(null);
-      switchTab("manual");
+        sess.distanceKm = Number(document.getElementById("m-dist").value) || null; sess.avgHr = Number(document.getElementById("m-hr").value) || null;
+      } else { var hrEl = document.getElementById("m-hr"); sess.avgHr = hrEl ? (Number(hrEl.value) || null) : null; }
+      saveSession(sess); renderManualPanel(null); switchLogTab("manual"); closeSheet("sheet-log");
     });
   }
 
-  /* ===================== quick add: CSV import (Garmin Connect export) ===================== */
   function parseCSV(text) {
     var rows = [], row = [], field = "", inQuotes = false;
     for (var i = 0; i < text.length; i++) {
       var c = text[i];
-      if (inQuotes) {
-        if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQuotes = false; }
-        else field += c;
-      } else {
-        if (c === '"') inQuotes = true;
-        else if (c === ",") { row.push(field); field = ""; }
-        else if (c === "\n" || c === "\r") {
-          if (c === "\r" && text[i + 1] === "\n") i++;
-          row.push(field); field = ""; rows.push(row); row = [];
-        } else field += c;
-      }
+      if (inQuotes) { if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQuotes = false; } else field += c; }
+      else { if (c === '"') inQuotes = true; else if (c === ",") { row.push(field); field = ""; } else if (c === "\n" || c === "\r") { if (c === "\r" && text[i + 1] === "\n") i++; row.push(field); field = ""; rows.push(row); row = []; } else field += c; }
     }
     if (field.length || row.length) { row.push(field); rows.push(row); }
     return rows.filter(function (r) { return r.length > 1 || (r[0] && r[0].trim()); });
   }
-
-  function guessModality(activityType) {
-    var t = (activityType || "").toLowerCase();
-    if (/run/.test(t)) return "run";
-    if (/cycl|bik/.test(t)) return "bike";
-    if (/strength|weight/.test(t)) return "strength";
-    if (/martial|mma|jiu|combat|wrestl/.test(t)) return "bjj";
-    return "other";
-  }
-  function parseDuration(str) {
-    if (!str) return null;
-    var parts = String(str).split(":").map(Number);
-    if (parts.some(isNaN)) return null;
-    if (parts.length === 3) return round1(parts[0] * 60 + parts[1] + parts[2] / 60);
-    if (parts.length === 2) return round1(parts[0] + parts[1] / 60);
-    return Number(str) || null;
-  }
+  function guessModality(t) { t = (t || "").toLowerCase(); if (/run/.test(t)) return "run"; if (/cycl|bik/.test(t)) return "bike"; if (/strength|weight/.test(t)) return "strength"; if (/martial|mma|jiu|combat|wrestl/.test(t)) return "bjj"; return "other"; }
+  function parseDuration(str) { if (!str) return null; var parts = String(str).split(":").map(Number); if (parts.some(isNaN)) return null; if (parts.length === 3) return round1(parts[0] * 60 + parts[1] + parts[2] / 60); if (parts.length === 2) return round1(parts[0] + parts[1] / 60); return Number(str) || null; }
   function numOnly(str) { if (!str) return null; var n = parseFloat(String(str).replace(/[^0-9.\-]/g, "")); return isNaN(n) ? null : n; }
   function simpleHash(str) { var h = 0; for (var i = 0; i < str.length; i++) { h = (h << 5) - h + str.charCodeAt(i); h |= 0; } return Math.abs(h).toString(36); }
 
   var csvParsed = [];
   function renderCsvPanel() {
     var panel = document.getElementById("panel-csv");
-    panel.innerHTML =
-      '<div class="banner">Export your Garmin Connect activities: <b>Activities → (select range) → Export CSV</b>, then upload it here. Parsing happens entirely in your browser &mdash; nothing is uploaded anywhere.</div>' +
-      '<div class="field"><label for="csv-file">Garmin Connect CSV</label><input type="file" id="csv-file" accept=".csv" /></div>' +
-      '<div id="csv-preview"></div>';
+    panel.innerHTML = '<div class="banner">Garmin Connect → Activities → Export CSV, then upload here. Parsed in your browser only.</div><div class="field"><label>Garmin Connect CSV</label><input type="file" id="csv-file" accept=".csv" /></div><div id="csv-preview"></div>';
     document.getElementById("csv-file").addEventListener("change", function (ev) {
       var file = ev.target.files[0]; if (!file) return;
       var reader = new FileReader();
       reader.onload = function () {
         var rows = parseCSV(reader.result);
-        if (!rows.length) { document.getElementById("csv-preview").innerHTML = '<div class="banner warn">Couldn’t read any rows from that file.</div>'; return; }
+        if (!rows.length) { document.getElementById("csv-preview").innerHTML = '<div class="banner warn">Couldn’t read any rows.</div>'; return; }
         var header = rows[0].map(function (h) { return h.trim().toLowerCase(); });
         function col(names) { for (var i = 0; i < names.length; i++) { var idx = header.indexOf(names[i]); if (idx >= 0) return idx; } return -1; }
-        var iDate = col(["date"]), iType = col(["activity type", "type"]), iDur = col(["time", "duration"]),
-          iDist = col(["distance"]), iHr = col(["avg hr", "average hr"]), iMaxHr = col(["max hr"]),
-          iElev = col(["total ascent", "elev gain"]), iTitle = col(["title"]);
+        var iDate = col(["date"]), iType = col(["activity type", "type"]), iDur = col(["time", "duration"]), iDist = col(["distance"]), iHr = col(["avg hr", "average hr"]), iTitle = col(["title"]);
         csvParsed = rows.slice(1).filter(function (r) { return r.length > 1; }).map(function (r) {
-          var rawDate = r[iDate] || "";
-          var date = (rawDate.match(/\d{4}-\d{2}-\d{2}/) || [todayISO()])[0];
-          var type = iType >= 0 ? r[iType] : "";
-          return {
-            date: date, activityType: type, title: iTitle >= 0 ? r[iTitle] : "",
-            modality: guessModality(type),
-            durationMin: iDur >= 0 ? parseDuration(r[iDur]) : null,
-            distanceKm: iDist >= 0 ? numOnly(r[iDist]) : null,
-            avgHr: iHr >= 0 ? numOnly(r[iHr]) : null,
-            maxHr: iMaxHr >= 0 ? numOnly(r[iMaxHr]) : null,
-            elevationM: iElev >= 0 ? numOnly(r[iElev]) : null
-          };
+          var rawDate = r[iDate] || ""; var date = (rawDate.match(/\d{4}-\d{2}-\d{2}/) || [todayISO()])[0]; var type = iType >= 0 ? r[iType] : "";
+          return { date: date, activityType: type, title: iTitle >= 0 ? r[iTitle] : "", modality: guessModality(type), durationMin: iDur >= 0 ? parseDuration(r[iDur]) : null, distanceKm: iDist >= 0 ? numOnly(r[iDist]) : null, avgHr: iHr >= 0 ? numOnly(r[iHr]) : null };
         }).filter(function (r) { return r.durationMin || r.distanceKm; });
-
         var prev = document.getElementById("csv-preview");
-        if (!csvParsed.length) { prev.innerHTML = '<div class="banner warn">No usable activity rows found in that export.</div>'; return; }
-        prev.innerHTML = '<div class="hint" style="margin:8px 0;">Found ' + csvParsed.length + ' activities. Check the modality guess, then import.</div>' +
-          '<div class="table-scroll" style="max-height:220px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;">' +
-          '<table><thead><tr><th>Date</th><th>Title</th><th>Modality</th><th>Dur</th></tr></thead><tbody>' +
-          csvParsed.map(function (r, idx) {
-            return "<tr><td class=\"mono\">" + r.date + "</td><td>" + (r.title || r.activityType || "—") + "</td><td><select data-idx=\"" + idx + "\" class=\"csv-mod-sel\">" +
-              MODALITIES.map(function (m) { return '<option value="' + m + '"' + (m === r.modality ? " selected" : "") + '>' + MOD_LABEL[m] + '</option>'; }).join("") +
-              "</select></td><td class=\"mono\">" + (r.durationMin ? r.durationMin + "m" : "—") + "</td></tr>";
-          }).join("") + "</tbody></table></div>" +
-          '<button class="btn btn-primary" id="btn-import-csv" type="button" style="width:100%; margin-top:10px;">Import ' + csvParsed.length + ' sessions</button>';
-
-        prev.querySelectorAll(".csv-mod-sel").forEach(function (sel) {
-          sel.addEventListener("change", function () { csvParsed[Number(sel.getAttribute("data-idx"))].modality = sel.value; });
-        });
+        if (!csvParsed.length) { prev.innerHTML = '<div class="banner warn">No usable activity rows found.</div>'; return; }
+        prev.innerHTML = '<div class="hint" style="margin:8px 0;">Found ' + csvParsed.length + ' activities.</div><div style="max-height:180px; overflow-y:auto; border:1px solid var(--border); border-radius:8px;"><table style="width:100%; font-size:12px; border-collapse:collapse;"><tbody>' +
+          csvParsed.map(function (r, idx) { return '<tr><td style="padding:5px 6px;" class="mono">' + r.date + '</td><td style="padding:5px 6px;">' + (r.title || r.activityType || "—") + '</td><td style="padding:5px 6px;"><select data-idx="' + idx + '" class="csv-mod-sel">' + MODALITIES.map(function (m) { return '<option value="' + m + '"' + (m === r.modality ? " selected" : "") + '>' + MOD_LABEL[m] + '</option>'; }).join("") + '</select></td></tr>'; }).join("") +
+          '</tbody></table></div><button class="btn btn-primary btn-block" id="btn-import-csv" type="button" style="margin-top:10px;">Import ' + csvParsed.length + ' sessions</button>';
+        prev.querySelectorAll(".csv-mod-sel").forEach(function (sel) { sel.addEventListener("change", function () { csvParsed[Number(sel.getAttribute("data-idx"))].modality = sel.value; }); });
         document.getElementById("btn-import-csv").addEventListener("click", function () {
-          csvParsed.forEach(function (r) {
-            var id = "garmin-" + simpleHash(r.date + "|" + r.activityType + "|" + r.durationMin + "|" + r.distanceKm);
-            saveSession({ id: id, date: r.date, modality: r.modality, durationMin: r.durationMin, distanceKm: r.distanceKm, avgHr: r.avgHr, maxHr: r.maxHr, elevationM: r.elevationM, notes: r.title || "", source: "garmin" });
-          });
-          prev.innerHTML = '<div class="banner">Imported. Re-importing the same file will just update these rows, not duplicate them.</div>';
+          csvParsed.forEach(function (r) { var id = "garmin-" + simpleHash(r.date + "|" + r.activityType + "|" + r.durationMin + "|" + r.distanceKm); saveSession({ id: id, date: r.date, modality: r.modality, durationMin: r.durationMin, distanceKm: r.distanceKm, avgHr: r.avgHr, notes: r.title || "", source: "garmin" }); });
+          prev.innerHTML = '<div class="banner">Imported. Re-importing the same file updates rows instead of duplicating.</div>';
         });
       };
       reader.readAsText(file);
     });
   }
 
-  /* ===================== quick add: photo (sample capability + images) ===================== */
   function renderPhotoPanel() {
     var panel = document.getElementById("panel-photo");
-    if (!CAP.sample || !CAP.imagesOk) {
-      panel.innerHTML = '<div class="banner warn">Photo parsing needs Claude access for this view, which isn’t available right now. Use Manual or Describe instead.</div>';
-      return;
-    }
-    panel.innerHTML =
-      '<div class="banner">Upload a photo of a lifting log, app screenshot, or BJJ notes. Claude reads it into a draft you can check before saving — nothing is saved automatically.</div>' +
-      '<div class="field"><label for="photo-file">Photo</label><input type="file" id="photo-file" accept="image/*" /></div>' +
-      '<button class="btn btn-primary" id="btn-parse-photo" type="button" style="width:100%;" disabled>Parse photo</button>' +
-      '<div id="photo-status" class="hint" style="margin-top:8px;"></div>';
+    if (!CAP.sample || !CAP.imagesOk) { panel.innerHTML = '<div class="banner warn">Photo parsing needs Claude access, which isn’t available right now. Use Manual instead.</div>'; return; }
+    panel.innerHTML = '<div class="banner">Upload a photo of a lifting log or BJJ notes — Claude drafts an entry, you check it before saving.</div><div class="field"><label>Photo</label><input type="file" id="photo-file" accept="image/*" /></div><button class="btn btn-primary btn-block" id="btn-parse-photo" type="button" disabled>Parse photo</button><div id="photo-status" class="hint" style="margin-top:8px;"></div>';
     var fileInput = document.getElementById("photo-file"), parseBtn = document.getElementById("btn-parse-photo");
     fileInput.addEventListener("change", function () { parseBtn.disabled = !fileInput.files[0]; });
     parseBtn.addEventListener("click", function () {
       var file = fileInput.files[0]; if (!file) return;
       parseBtn.disabled = true; document.getElementById("photo-status").textContent = "Reading photo…";
-      var prompt = "This photo is a training-log screenshot or handwritten note (strength training or jiu jitsu). " +
-        "Extract what you can actually read — never invent numbers. Reply with ONLY this JSON shape:\n" +
-        '{"modality":"strength"|"bjj"|"other","date":"YYYY-MM-DD or null","durationMin":number|null,' +
-        '"exercises":[{"name":string,"sets":number,"reps":number,"weight":number}],"notes":string}\n' +
-        "For a BJJ/rolling log, exercises can be an empty array and notes should summarize rounds/technique/duration. Use null when unreadable.";
+      var prompt = "This photo is a training-log screenshot or note (strength or jiu jitsu). Extract only what you can read — never invent numbers. Reply with ONLY this JSON: " +
+        '{"modality":"strength"|"bjj"|"other","date":"YYYY-MM-DD or null","durationMin":number|null,"exercises":[{"name":string,"sets":number,"reps":number,"weight":number}],"notes":string}';
       CAP.sample.json(prompt, { images: file, modelTier: "default" }).then(function (data) {
-        document.getElementById("photo-status").textContent = "Parsed — review below before saving.";
-        renderManualPanel({
-          _banner: "Parsed from your photo — double-check every field before saving.",
-          date: data.date || todayISO(), modality: data.modality || "strength", durationMin: data.durationMin,
-          exercises: data.exercises, notes: data.notes || "", source: "photo"
-        });
-        switchTab("manual");
-      }).catch(function (e) {
-        document.getElementById("photo-status").textContent = errCopy(e);
-        parseBtn.disabled = false;
-      });
+        document.getElementById("photo-status").textContent = "Parsed — review before saving.";
+        renderManualPanel({ _banner: "Parsed from your photo — check before saving.", date: data.date || todayISO(), modality: data.modality || "strength", durationMin: data.durationMin, exercises: data.exercises, notes: data.notes || "", source: "photo" });
+        switchLogTab("manual");
+      }).catch(function (e) { document.getElementById("photo-status").textContent = sampleErrCopy(e); parseBtn.disabled = false; });
     });
   }
-
-  /* ===================== quick add: describe (sample capability, text + optional dictation) ===================== */
   function renderDescribePanel() {
     var panel = document.getElementById("panel-describe");
-    if (!CAP.sample) {
-      panel.innerHTML = '<div class="banner warn">Describing a session needs Claude access for this view, which isn’t available right now. Use Manual instead.</div>';
-      return;
-    }
+    if (!CAP.sample) { panel.innerHTML = '<div class="banner warn">Needs Claude access, which isn’t available right now.</div>'; return; }
     var hasSpeech = "webkitSpeechRecognition" in window || "SpeechRecognition" in window;
-    panel.innerHTML =
-      '<div class="banner">Type or dictate what you did — "45 min roll, 6 rounds, worked back takes, felt gassed by round 5." Claude turns it into a draft entry.</div>' +
-      '<div class="field"><label for="desc-text">Session</label><textarea id="desc-text" placeholder="Tell me about today’s session…"></textarea></div>' +
-      (hasSpeech ? '<button class="btn btn-ghost btn-sm" id="btn-mic" type="button" style="margin-bottom:10px;">🎙 Dictate</button>' : "") +
-      '<button class="btn btn-primary" id="btn-parse-desc" type="button" style="width:100%;">Parse with Claude</button>' +
-      '<div id="desc-status" class="hint" style="margin-top:8px;"></div>';
-
+    panel.innerHTML = '<div class="banner">Type or dictate what you did.</div><div class="field"><label>Session</label><textarea id="desc-text" placeholder="Tell me about today’s session…"></textarea></div>' + (hasSpeech ? '<button class="btn btn-ghost btn-sm" id="btn-mic" type="button" style="margin-bottom:10px; border:1px solid var(--border-strong);">🎙 Dictate</button>' : "") + '<button class="btn btn-primary btn-block" id="btn-parse-desc" type="button">Parse with Claude</button><div id="desc-status" class="hint" style="margin-top:8px;"></div>';
     if (hasSpeech) {
-      var Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-      var rec = new Rec(); rec.continuous = false; rec.interimResults = false;
+      var Rec = window.SpeechRecognition || window.webkitSpeechRecognition; var rec = new Rec(); rec.continuous = false; rec.interimResults = false;
       var micBtn = document.getElementById("btn-mic"), listening = false;
-      micBtn.addEventListener("click", function () {
-        if (listening) { rec.stop(); return; }
-        try { rec.start(); listening = true; micBtn.textContent = "● Listening…"; } catch (e) {}
-      });
-      rec.onresult = function (ev) {
-        var txt = ev.results[0][0].transcript;
-        var ta = document.getElementById("desc-text"); ta.value = (ta.value ? ta.value + " " : "") + txt;
-      };
-      rec.onend = function () { listening = false; micBtn.textContent = "🎙 Dictate"; };
-      rec.onerror = function () { listening = false; micBtn.textContent = "🎙 Dictate"; };
+      micBtn.addEventListener("click", function () { if (listening) { rec.stop(); return; } try { rec.start(); listening = true; micBtn.textContent = "● Listening…"; } catch (e) {} });
+      rec.onresult = function (ev) { var txt = ev.results[0][0].transcript; var ta = document.getElementById("desc-text"); ta.value = (ta.value ? ta.value + " " : "") + txt; };
+      rec.onend = function () { listening = false; micBtn.textContent = "🎙 Dictate"; }; rec.onerror = rec.onend;
     }
-
     document.getElementById("btn-parse-desc").addEventListener("click", function () {
-      var text = document.getElementById("desc-text").value.trim();
-      if (!text) return;
+      var text = document.getElementById("desc-text").value.trim(); if (!text) return;
       document.getElementById("desc-status").textContent = "Thinking…";
-      var prompt = "Turn this athlete's spoken/typed training-session note into structured data. Today's date is " + todayISO() + ". " +
-        "Capture only objective facts (duration, distance, exercises/sets/reps/weight if mentioned, rounds) — do NOT invent a numeric intensity or RPE rating; put any subjective color as plain text in notes.\n" +
-        'Reply with ONLY this JSON shape: {"modality":"run"|"bike"|"strength"|"bjj"|"other","date":"YYYY-MM-DD","durationMin":number|null,"distanceKm":number|null,"avgHr":number|null,"exercises":[{"name":string,"sets":number,"reps":number,"weight":number}],"notes":string}\n\n' +
-        "Note: “" + text + "”";
+      var prompt = "Turn this athlete note into structured data. Today is " + todayISO() + ". Capture only objective facts — no numeric intensity/RPE, subjective color goes in notes as text. Reply with ONLY this JSON: " +
+        '{"modality":"run"|"bike"|"strength"|"bjj"|"other","date":"YYYY-MM-DD","durationMin":number|null,"distanceKm":number|null,"avgHr":number|null,"exercises":[{"name":string,"sets":number,"reps":number,"weight":number}],"notes":string}\n\nNote: "' + text + '"';
       CAP.sample.json(prompt, { modelTier: "default" }).then(function (data) {
-        document.getElementById("desc-status").textContent = "Parsed — review below before saving.";
-        renderManualPanel({
-          _banner: "Parsed from your description — double-check every field before saving.",
-          date: data.date || todayISO(), modality: data.modality || "bjj", durationMin: data.durationMin,
-          distanceKm: data.distanceKm, avgHr: data.avgHr, exercises: data.exercises, notes: data.notes || text, source: "voice"
-        });
-        switchTab("manual");
-      }).catch(function (e) {
-        document.getElementById("desc-status").textContent = errCopy(e);
-      });
+        document.getElementById("desc-status").textContent = "Parsed — review before saving.";
+        renderManualPanel({ _banner: "Parsed from your description — check before saving.", date: data.date || todayISO(), modality: data.modality || "bjj", durationMin: data.durationMin, distanceKm: data.distanceKm, avgHr: data.avgHr, exercises: data.exercises, notes: data.notes || text, source: "voice" });
+        switchLogTab("manual");
+      }).catch(function (e) { document.getElementById("desc-status").textContent = sampleErrCopy(e); });
     });
   }
-
-  function errCopy(e) {
+  function sampleErrCopy(e) {
     var code = e && e.code;
     if (code === "not_granted") return "Claude access was declined for this session.";
     if (code === "images_unavailable") return "This view can't send images.";
-    if (code === "rate_limited") return "Too many requests right now — try again shortly.";
-    if (code === "invalid_json" || code === "empty_completion") return "Couldn't make sense of that — try adding a bit more detail.";
+    if (code === "rate_limited") return "Too many requests — try again shortly.";
+    if (code === "invalid_json" || code === "empty_completion") return "Couldn't make sense of that — add a bit more detail.";
     return "Something went wrong — try again.";
   }
 
-  /* ===================== tabs ===================== */
-  function switchTab(name) {
-    document.querySelectorAll(".tab-btn").forEach(function (b) { b.setAttribute("aria-selected", b.getAttribute("data-tab") === name ? "true" : "false"); });
+  function switchLogTab(name) {
+    document.querySelectorAll("#tabs .tab-btn2").forEach(function (b) { b.setAttribute("aria-selected", b.getAttribute("data-tab") === name ? "true" : "false"); });
     ["manual", "csv", "photo", "describe"].forEach(function (t) { document.getElementById("panel-" + t).hidden = t !== name; });
   }
-  document.getElementById("tabs").addEventListener("click", function (ev) {
-    var btn = ev.target.closest(".tab-btn"); if (!btn) return;
-    switchTab(btn.getAttribute("data-tab"));
-  });
+  document.getElementById("tabs").addEventListener("click", function (ev) { var b = ev.target.closest(".tab-btn2"); if (b) switchLogTab(b.getAttribute("data-tab")); });
 
-  /* ===================== top-level wiring ===================== */
-  document.getElementById("btn-jump-add").addEventListener("click", function () {
-    document.getElementById("quickadd-card").scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-  document.getElementById("btn-settings").addEventListener("click", function () {
-    var c = document.getElementById("settings-card");
-    c.style.display = c.style.display === "none" ? "block" : "none";
-    if (c.style.display === "block") c.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  });
-  document.getElementById("btn-clear-sample").addEventListener("click", function () {
-    clearSampleIfNeeded(); lsSet(LS_KEYS.sessions, []); lsSet(LS_KEYS.blocks, []); renderAll();
-  });
-  document.getElementById("filter-modality").addEventListener("change", renderTable);
-  document.getElementById("log-tbody").addEventListener("click", function (ev) {
-    var btn = ev.target.closest("[data-del]"); if (!btn) return;
-    if (confirm("Delete this session?")) deleteSession(btn.getAttribute("data-del"));
-  });
-  document.getElementById("btn-export").addEventListener("click", function () {
-    var payload = JSON.stringify({ sessions: state.sessions, blocks: state.blocks, profile: state.profile }, null, 2);
-    if (CAP.downloads) {
-      CAP.downloads.save({ filename: "load-ledger-backup.json", data: payload }).catch(function () {});
-    } else {
-      var blob = new Blob([payload], { type: "application/json" });
-      var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "load-ledger-backup.json";
-      document.body.appendChild(a); a.click(); a.remove();
+  /* ===================== mcp: House tasks ===================== */
+  var houseUnsub = null, lastTasks = null, lastTasksErr = null;
+  function mcpErrCopy(e) {
+    var code = e && e.code, server = (e && e.server) || "this connector";
+    if (code === "needs_reauth") return "Reconnect " + server + " in claude.ai Settings → Connectors.";
+    if (code === "server_not_connected") return "Add " + server + " in claude.ai Settings → Connectors.";
+    if (code === "selection_required") return "Choose a " + server + " account in the prompt, then reload.";
+    if (code === "blocked_by_policy" || code === "approval_required") return server + " access is restricted for this account.";
+    if (code === "server_unavailable" || code === "upstream_error") return server + " isn't responding right now.";
+    if (code === "tool_error") return e.message || (server + " reported an error.");
+    if (code === "not_granted" || code === "capability_disabled" || code === "capability_removed") return null; // hide entirely
+    return "Couldn't reach " + server + " right now.";
+  }
+  function initHouseWatch() {
+    if (!CAP.mcp) { renderHouseSections(null, { code: "not_granted" }); return; }
+    if (houseUnsub) houseUnsub();
+    houseUnsub = CAP.mcp.watchTool(CLICKUP_SERVER, "clickup_filter_tasks", { list_ids: [state.profile.clickupListId], include_closed: false }, function (ev) {
+      if (ev.type === "data") { lastTasks = (ev.result.payload && ev.result.payload.tasks) || []; lastTasksErr = null; }
+      else { lastTasksErr = ev.error; if (["needs_reauth", "server_not_connected", "blocked_by_policy", "approval_required"].indexOf(ev.error.code) >= 0) lastTasks = null; }
+      renderHouseSections(lastTasks, lastTasksErr);
+    }, { refetchInterval: 120000 });
+  }
+  function taskDueInfo(t) {
+    if (!t.due_date) return { text: "No due date", overdue: false };
+    var ms = Number(t.due_date); if (isNaN(ms)) return { text: "", overdue: false };
+    var iso = new Date(ms).toISOString().slice(0, 10);
+    var overdue = iso < todayISO();
+    return { text: (overdue ? "Overdue · " : "Due ") + fmtDate(iso), overdue: overdue };
+  }
+  function toggleTask(t) {
+    if (!CAP.mcp) return;
+    var newStatus = t.status === "complete" ? "to do" : "complete";
+    CAP.mcp.callTool(CLICKUP_SERVER, "clickup_update_task", { task_id: t.id, status: newStatus }).then(function () {
+      CAP.mcp.invalidate(CLICKUP_SERVER, "clickup_filter_tasks");
+    }).catch(function (e) { alert(mcpErrCopy(e) || "Couldn't update that task."); });
+  }
+  function addHouseTask(name) {
+    if (!CAP.mcp || !name.trim()) return;
+    CAP.mcp.callTool(CLICKUP_SERVER, "clickup_create_task", { name: name.trim(), list_id: state.profile.clickupListId }).then(function () {
+      CAP.mcp.invalidate(CLICKUP_SERVER, "clickup_filter_tasks");
+    }).catch(function (e) { alert(mcpErrCopy(e) || "Couldn't add that task."); });
+  }
+  function taskRowHtml(t) {
+    var due = taskDueInfo(t), done = t.status === "complete";
+    return '<div class="task-row"><button class="task-check' + (done ? " done" : "") + '" data-taskid="' + t.id + '" type="button">' + (done ? "✓" : "") + '</button><div class="task-meta"><div class="task-name">' + t.name + '</div><div class="task-due' + (due.overdue ? " overdue" : "") + '">' + due.text + '</div></div></div>';
+  }
+  function renderHouseSections(tasks, err) {
+    var todayEl = document.getElementById("today-house-list"), fullEl = document.getElementById("house-full-list");
+    if (err) {
+      var copy = mcpErrCopy(err);
+      var html = copy ? '<div class="banner err">' + copy + '</div>' : '<div class="empty-note">House tasks aren’t connected in this view.</div>';
+      todayEl.innerHTML = html; fullEl.innerHTML = html; return;
     }
+    if (!tasks) { todayEl.innerHTML = '<div class="empty-note">Loading…</div>'; fullEl.innerHTML = '<div class="empty-note">Loading…</div>'; return; }
+    var sorted = tasks.slice().sort(function (a, b) { var da = a.due_date ? Number(a.due_date) : Infinity, db = b.due_date ? Number(b.due_date) : Infinity; return da - db; });
+    if (!sorted.length) { todayEl.innerHTML = '<div class="empty-note">Nothing on the list.</div>'; fullEl.innerHTML = '<div class="empty-note">Nothing on the list. Add one above.</div>'; }
+    else {
+      todayEl.innerHTML = sorted.slice(0, 4).map(taskRowHtml).join("");
+      fullEl.innerHTML = sorted.map(taskRowHtml).join("");
+    }
+    [todayEl, fullEl].forEach(function (el) { el.querySelectorAll("[data-taskid]").forEach(function (btn) { btn.addEventListener("click", function () { var t = tasks.find(function (x) { return x.id === btn.getAttribute("data-taskid"); }); if (t) toggleTask(t); }); }); });
+  }
+  document.getElementById("btn-add-house-task").addEventListener("click", function () {
+    var input = document.getElementById("house-new-task"); addHouseTask(input.value); input.value = "";
   });
+  document.getElementById("house-new-task").addEventListener("keydown", function (ev) { if (ev.key === "Enter") document.getElementById("btn-add-house-task").click(); });
+
+  /* ===================== mcp: weather ===================== */
+  var weatherUnsub = null, lastWeather = null, lastWeatherErr = null;
+  function onWeatherLocationMaybeReady() {
+    if (!CAP.mcp || !state.profile.weatherLocationKey) { renderWeatherCard(null, null); return; }
+    if (prevWeatherKey === state.profile.weatherLocationKey && weatherUnsub) return;
+    prevWeatherKey = state.profile.weatherLocationKey;
+    if (weatherUnsub) weatherUnsub();
+    weatherUnsub = CAP.mcp.watchTool(WEATHER_SERVER, "widgets-daily-claude", { locationKey: state.profile.weatherLocationKey, unit: "imperial" }, function (ev) {
+      if (ev.type === "data") { lastWeather = ev.result.payload; lastWeatherErr = null; }
+      else { lastWeatherErr = ev.error; if (["needs_reauth", "server_not_connected", "blocked_by_policy", "approval_required"].indexOf(ev.error.code) >= 0) lastWeather = null; }
+      renderWeatherCard(lastWeather, lastWeatherErr);
+    }, { refetchInterval: 3600000 });
+  }
+  function wxEmoji(day) { var p = day.rainProbabilityValue || 0; if (p >= 55) return "🌧️"; if (p >= 25) return "🌥️"; return "☀️"; }
+  function renderWeatherCard(payload, err) {
+    var el = document.getElementById("weather-card");
+    if (!CAP.mcp) { el.innerHTML = '<div class="empty-note">Weather isn’t connected in this view.</div>'; return; }
+    if (!state.profile.weatherLocationKey) {
+      el.innerHTML = '<div class="banner">Set your location to see this week’s rain outlook.</div><button class="btn btn-block" id="wx-set-loc" type="button">Set location in Settings</button>';
+      document.getElementById("wx-set-loc").addEventListener("click", function () { openSheet("sheet-settings"); });
+      return;
+    }
+    if (err) { var copy = mcpErrCopy(err); el.innerHTML = copy ? '<div class="banner err">' + copy + '</div>' : '<div class="empty-note">Weather isn’t available in this view.</div>'; return; }
+    if (!payload) { el.innerHTML = '<div class="empty-note">Loading forecast…</div>'; return; }
+    var days = (payload.dailyForecast || []).slice(0, 7);
+    var totalRain = 0, maxRainChance = 0;
+    var strip = days.map(function (d, i) {
+      var rain = (d.day.extended && d.day.extended.rainValue || 0) + (d.night.extended && d.night.extended.rainValue || 0);
+      totalRain += rain; maxRainChance = Math.max(maxRainChance, d.day.rainProbabilityValue || 0);
+      return '<div class="wx-day"><div class="d">' + (i === 0 ? "Today" : d.shortDayOfWeek) + '</div><div class="ic">' + wxEmoji(d.day) + '</div><div class="hi">' + Math.round(d.day.temperature) + '°</div><div class="rn">' + (d.day.rainProbabilityValue || 0) + '%</div></div>';
+    }).join("");
+    var verdict = totalRain >= 0.5 || maxRainChance >= 60 ? "Rain expected — probably skip watering this week." : totalRain >= 0.1 ? "A little rain expected — check before watering." : "Dry week ahead — the yard will need watering.";
+    el.innerHTML = '<div class="wx-strip">' + strip + '</div><div class="wx-verdict">' + verdict + ' <span class="hint">(' + (payload.location ? payload.location.localizedName : state.profile.weatherLocationName) + ')</span></div>';
+  }
+
+  /* ===================== Ask Claude (Today) ===================== */
+  function renderAskCard() {
+    var el = document.getElementById("ask-card");
+    if (!CAP.sample) { el.innerHTML = '<div class="empty-note">Ask Claude isn’t available in this view.</div>'; return; }
+    el.innerHTML = '<div class="field"><textarea id="ask-input" placeholder="e.g. quick dinner idea with chicken and broccoli"></textarea></div><button class="btn btn-primary btn-block" id="btn-ask" type="button">Ask</button><div id="ask-answer" class="ask-answer" style="display:none;"></div>';
+    document.getElementById("btn-ask").addEventListener("click", function () {
+      var q = document.getElementById("ask-input").value.trim(); if (!q) return;
+      var out = document.getElementById("ask-answer"); out.style.display = "block"; out.textContent = "Thinking…";
+      var prompt = "You're a quick-answer box on someone's personal home dashboard. Dietary guideline to respect for any food question: " + (state.profile.dietaryNotes || "none set") + ". Be brief and conversational.\n\nQuestion: " + q;
+      CAP.sample(prompt, { modelTier: "quick", onText: function (u) { out.textContent = u.text; } }).catch(function (e) { out.textContent = sampleErrCopy(e); });
+    });
+  }
+
+  /* ===================== Today: training snapshot ===================== */
+  function renderTodayTraining(overall, todayBlock) {
+    var el = document.getElementById("today-training");
+    var lastR = overall.ratio[overall.ratio.length - 1], zone = acwrZone(lastR);
+    var thisWeekStart = addDays(todayISO(), -6);
+    var count = state.sessions.filter(function (s) { return s.date >= thisWeekStart && s.date <= todayISO(); }).length;
+    el.innerHTML = '<div style="display:flex; align-items:center; justify-content:space-between;"><div><div class="today-acwr-num">' + (lastR === null ? "–" : lastR.toFixed(2)) + ' ACWR</div><div class="sub" style="font-size:12.5px; color:var(--ink-secondary); margin-top:2px;">' + count + ' session' + (count === 1 ? "" : "s") + ' this week' + (todayBlock ? " · " + todayBlock.phase : "") + '</div></div><span class="pill pill-' + zone + '"><span class="dot"></span>' + ZONE_LABEL[zone] + '</span></div>';
+  }
+  document.getElementById("today-training").addEventListener("click", function () { switchMainTab("train"); });
+
+  /* ===================== nav / sheets ===================== */
+  function switchMainTab(name) {
+    ["today", "train", "house"].forEach(function (t) { document.getElementById("tab-" + t).hidden = t !== name; });
+    document.querySelectorAll(".nav-btn").forEach(function (b) { b.setAttribute("aria-current", b.getAttribute("data-nav") === name ? "true" : "false"); });
+    document.getElementById("fab-log").hidden = name !== "train";
+  }
+  document.querySelectorAll(".nav-btn").forEach(function (b) { b.addEventListener("click", function () { switchMainTab(b.getAttribute("data-nav")); }); });
+  document.querySelectorAll("[data-goto]").forEach(function (el) { if (el.tagName === "BUTTON" && el.hasAttribute("data-goto")) el.addEventListener("click", function () { switchMainTab(el.getAttribute("data-goto")); }); });
+
+  function openSheet(id) { document.getElementById(id).hidden = false; document.getElementById("backdrop-" + id.replace("sheet-", "")).hidden = false; }
+  function closeSheet(id) { document.getElementById(id).hidden = true; document.getElementById("backdrop-" + id.replace("sheet-", "")).hidden = true; }
+  document.querySelectorAll("[data-close]").forEach(function (b) { b.addEventListener("click", function () { closeSheet(b.getAttribute("data-close")); }); });
+  document.getElementById("backdrop-log").addEventListener("click", function () { closeSheet("sheet-log"); });
+  document.getElementById("backdrop-blocks").addEventListener("click", function () { closeSheet("sheet-blocks"); });
+  document.getElementById("backdrop-settings").addEventListener("click", function () { closeSheet("sheet-settings"); });
+  document.getElementById("fab-log").addEventListener("click", function () { openSheet("sheet-log"); });
+  document.getElementById("btn-manage-blocks").addEventListener("click", function () { openSheet("sheet-blocks"); });
+  document.getElementById("btn-open-settings").addEventListener("click", function () { openSheet("sheet-settings"); });
+  document.getElementById("btn-clear-sample").addEventListener("click", function () { clearSampleIfNeeded(); lsSet(LS_KEYS.sessions, []); lsSet(LS_KEYS.blocks, []); renderAll(); });
 
   /* ===================== master render ===================== */
+  var manualPanelSeeded = false;
   function renderAll() {
     if (!state.ready) return;
     document.getElementById("sample-banner").style.display = state.isSample ? "flex" : "none";
 
     var axis = buildDateAxis(state.sessions);
-    var dates = []; var cur = axis.start;
-    while (cur <= axis.end) { dates.push(cur); cur = addDays(cur, 1); }
-
+    var dates = []; var cur = axis.start; while (cur <= axis.end) { dates.push(cur); cur = addDays(cur, 1); }
     var dailyMaps = dailyLoadMaps(state.sessions, state.profile);
-    var perMod = {};
-    TRACKED_MODALITIES.forEach(function (m) { perMod[m] = rollingSeries(dailyMaps[m], dates); });
+    var perMod = {}; TRACKED_MODALITIES.forEach(function (m) { perMod[m] = rollingSeries(dailyMaps[m], dates); });
     var overall = overallComposite(perMod, dates);
     var overallByDate = {}; dates.forEach(function (d, i) { overallByDate[d] = overall.ratio[i]; });
+    lastPerMod = perMod; lastOverall = overall; lastDates = dates;
 
-    renderStats(dates, overall, perMod);
-    renderAcwrChart(document.getElementById("overall-chart"), { dates: dates, ratio: overall.ratio, compact: false, colorVar: "--accent" });
-    renderMiniGrid(dates, perMod);
-    renderHeatmap(dates, overallByDate);
-    renderTable();
+    var todayBlock = blockForDate(todayISO());
+    renderTrainStats(overall, todayBlock);
+    renderTrainSeg(perMod);
+    renderTrainChartSection(perMod);
+    renderHeatmap(overallByDate);
+    renderSessionList();
     renderBlocks();
-    renderSettings();
+    renderTodayTraining(overall, todayBlock);
 
-    // Render the manual quick-add form once real profile data has loaded (so the HR hint and
-    // units reflect it), then leave it alone so later store updates don't clobber a draft in progress.
     if (!manualPanelSeeded) { renderManualPanel(null); manualPanelSeeded = true; }
   }
-  var manualPanelSeeded = false;
 
   /* ===================== boot ===================== */
-  renderCsvPanel();
-  renderPhotoPanel();
-  renderDescribePanel();
+  renderCsvPanel(); renderPhotoPanel(); renderDescribePanel(); renderAskCard();
+  renderWeatherCard(null, null); renderHouseSections(null, null); renderSettings();
 
   (window.claude && window.claude.use ? window.claude.use("sample") : Promise.resolve(null)).then(function (s) {
     CAP.sample = s;
-    if (!s) { renderPhotoPanel(); renderDescribePanel(); return; }
-    s.limits().then(function (lims) { CAP.imagesOk = !!lims.images; renderPhotoPanel(); }).catch(function () { renderPhotoPanel(); });
-    renderDescribePanel();
+    if (s) { s.limits().then(function (l) { CAP.imagesOk = !!l.images; renderPhotoPanel(); }).catch(function () { renderPhotoPanel(); }); }
+    renderDescribePanel(); renderAskCard();
   });
   (window.claude && window.claude.use ? window.claude.use("downloads") : Promise.resolve(null)).then(function (d) { CAP.downloads = d; });
+  (window.claude && window.claude.use ? window.claude.use("mcp") : Promise.resolve(null)).then(function (m) {
+    CAP.mcp = m;
+    initHouseWatch();
+    onWeatherLocationMaybeReady();
+  });
 
   initStore();
 })();
