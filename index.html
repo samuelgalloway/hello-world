@@ -252,19 +252,21 @@ textarea.capture-input{
 /* ============================================================
    1. CONFIG — fill these in, then re-upload/deploy the file.
 
-   Note on ANTHROPIC_API_KEY: it ships inside this file's source,
-   so anyone who can view the deployed page's source (or the
-   network tab) can read it. That's an accepted tradeoff for a
-   small, sign-in-gated family app — do not reuse this key
-   anywhere it would matter more, and regenerate it if the link
-   is ever shared beyond the family.
+   There is NO Anthropic API key here on purpose. The "clean this
+   up" step calls /api/cleanup (see that file), a small server
+   function that holds the real key as a Vercel environment
+   variable — it never ships to the browser. See SETUP.md.
+
+   GOOGLE_CLIENT_ID and DRIVE_FOLDER_ID are fine to leave here:
+   an OAuth Client ID is meant to be public (Google restricts it
+   by Authorized JavaScript origin, not by secrecy), and the
+   folder ID is just an identifier — actual access is controlled
+   by each person's Google sign-in and Drive's own permissions.
    ============================================================ */
 const CONFIG = {
   FARM_NAME: "Our Farm Story",              // shows in the header
   GOOGLE_CLIENT_ID: "PASTE_YOUR_GOOGLE_OAUTH_CLIENT_ID_HERE",
-  DRIVE_FOLDER_ID: "PASTE_YOUR_SHARED_DRIVE_FOLDER_ID_HERE",
-  ANTHROPIC_API_KEY: "PASTE_YOUR_ANTHROPIC_API_KEY_HERE",
-  ANTHROPIC_MODEL: "claude-sonnet-5"
+  DRIVE_FOLDER_ID: "PASTE_YOUR_SHARED_DRIVE_FOLDER_ID_HERE"
 };
 
 /* ============================================================
@@ -489,41 +491,21 @@ async function saveEntries(){
 
 /* ============================================================
    6. CLAUDE CLEANUP
+   The actual Anthropic call happens server-side in /api/cleanup.js
+   — this just hands it the raw note and gets back clean JSON.
+   Nothing here ever sees the API key.
    ============================================================ */
 async function cleanupWithClaude(rawText){
-  const prompt = `You are helping turn a rough, spoken or typed note about a family farm's history into a clean timeline entry. The note may be messy, a fragment, or just a description of a photo.
-
-Raw note: """${rawText}"""
-
-Reply with ONLY a JSON object, no markdown fences, no commentary, in this exact shape:
-{"title": "short warm title, under 8 words", "dateLabel": "a human date guess like '1986' or 'Summer 1990s' or 'Undated', based only on what's in the note", "sortYear": <a 4-digit integer year if you can reasonably guess one, otherwise null>, "summary": "2-4 friendly sentences in plain language, cleaned up but keeping all the real facts from the note, written as if for a family history"}`;
-
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch('/api/cleanup', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': CONFIG.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: CONFIG.ANTHROPIC_MODEL,
-      max_tokens: 500,
-      messages: [{ role: 'user', content: prompt }]
-    })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ rawText })
   });
+  const data = await res.json().catch(()=> ({}));
   if (!res.ok){
-    const t = await res.text().catch(()=>'');
-    throw new Error(`Claude request failed (${res.status}): ${t.slice(0,200)}`);
+    throw new Error(data.error || `Cleanup request failed (${res.status})`);
   }
-  const data = await res.json();
-  const text = (data.content || []).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim();
-  const cleaned = text.replace(/^```json|```$/g, '').trim();
-  try{
-    return JSON.parse(cleaned);
-  }catch(e){
-    return { title: 'A farm memory', dateLabel: 'Undated', sortYear: null, summary: rawText };
-  }
+  return data;
 }
 
 /* ============================================================
@@ -548,7 +530,6 @@ function maybeShowSetupNote(){
   const missing = [];
   if (CONFIG.GOOGLE_CLIENT_ID.startsWith('PASTE')) missing.push('Google Client ID');
   if (CONFIG.DRIVE_FOLDER_ID.startsWith('PASTE')) missing.push('Drive Folder ID');
-  if (CONFIG.ANTHROPIC_API_KEY.startsWith('PASTE')) missing.push('Anthropic API key');
   if (missing.length){
     const note = document.getElementById('setupNote');
     if (note){
