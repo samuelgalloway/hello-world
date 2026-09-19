@@ -64,7 +64,12 @@ main {
   overflow: hidden;
 }
 
-.mic-btn {
+.controls {
+  display: flex;
+  gap: 8px;
+}
+.mic-btn,
+.record-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -78,9 +83,22 @@ main {
   font-weight: 600;
   cursor: pointer;
 }
+.mic-btn {
+  flex: 2;
+}
+.record-btn {
+  flex: 1;
+  background: transparent;
+  color: var(--fg);
+}
 .mic-btn[aria-pressed="true"] {
   background: #dc2626;
   animation: pulse 1.6s ease-in-out infinite;
+}
+.record-btn[aria-pressed="true"] {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
 }
 .mic-icon {
   font-size: 18px;
@@ -139,4 +157,20 @@ main {
 }
 .log li.ok {
   background: var(--ok-bg);
+}
+.log li.confirm {
+  background: #fffbeb;
+  border-color: #f59e0b;
+}
+.log li.confirm .result {
+  color: #92400e;
+}
+@media (prefers-color-scheme: dark) {
+  .log li.confirm {
+    background: #451a03;
+    border-color: #b45309;
+  }
+  .log li.confirm .result {
+    color: #fcd34d;
+  }
 }

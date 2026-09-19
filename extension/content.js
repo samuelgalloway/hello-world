@@ -30,6 +30,11 @@
   ].join(", ");
 
   let candidateMap = new Map();
+  // Tracked independently of candidateMap (which is rebuilt, invalidating
+  // ids, on every GET_STATE -- including the one triggered by the "undo"
+  // utterance itself), so undo can restore the right element regardless of
+  // how GET_STATE has churned since the original type happened.
+  let lastTyped = null;
 
   function clean(text) {
     return (text || "").replace(/\s+/g, " ").trim().slice(0, 120);
@@ -97,8 +102,22 @@
     return "";
   }
 
+  // Open shadow roots are separate DOM subtrees that querySelectorAll()
+  // doesn't pierce, and modern component libraries (design systems, custom
+  // admin widgets) lean on them heavily. Closed shadow roots have no way to
+  // be reached from outside and stay invisible to this extension.
+  function collectRoots(root, acc) {
+    acc.push(root);
+    for (const el of root.querySelectorAll("*")) {
+      if (el.shadowRoot) collectRoots(el.shadowRoot, acc);
+    }
+    return acc;
+  }
+
   function getCandidates() {
-    const nodes = Array.from(document.querySelectorAll(SELECTOR));
+    const roots = collectRoots(document, []);
+    const nodes = [];
+    for (const root of roots) nodes.push(...root.querySelectorAll(SELECTOR));
     const seen = new Set();
     const items = [];
     for (const el of nodes) {
@@ -155,13 +174,35 @@
       case "type": {
         highlight(el);
         el.focus();
+        const previousValue = el.isContentEditable ? el.textContent : el.value;
         if (el.isContentEditable) {
           el.textContent = value;
           el.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertText", data: value }));
         } else {
           setNativeValue(el, value);
         }
-        return { success: true, message: `Typed "${value}" into "${computeLabel(el) || el.tagName.toLowerCase()}".` };
+        lastTyped = { el, previousValue };
+        return {
+          success: true,
+          message: `Typed "${value}" into "${computeLabel(el) || el.tagName.toLowerCase()}".`,
+          previousValue,
+        };
+      }
+      case "undo_type": {
+        if (!lastTyped || !lastTyped.el.isConnected) {
+          return { success: false, message: "Nothing to undo here." };
+        }
+        const { el: target, previousValue: restoreValue } = lastTyped;
+        highlight(target);
+        target.focus();
+        if (target.isContentEditable) {
+          target.textContent = restoreValue;
+          target.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "deleteContentBackward" }));
+        } else {
+          setNativeValue(target, restoreValue);
+        }
+        lastTyped = null;
+        return { success: true, message: `Restored "${target.value ?? restoreValue}".` };
       }
       case "scroll": {
         highlight(el);

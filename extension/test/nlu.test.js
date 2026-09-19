@@ -2,11 +2,13 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   extractTypedValue,
+  extractTypedValueDetailed,
   extractNavigationPhrase,
   looksLikeUrl,
   normalizeToUrl,
   buildDecisionRequest,
   parseDecision,
+  assessRisk,
 } from "../lib/nlu.js";
 
 test("extractTypedValue prefers quoted content", () => {
@@ -128,4 +130,62 @@ test("parseDecision extracts a typed value", () => {
     shortcuts: [],
   });
   assert.equal(decision.value, "Jane Doe");
+});
+
+test("extractTypedValueDetailed marks quoted/pattern matches exact, raw fallback inexact", () => {
+  assert.deepEqual(extractTypedValueDetailed('type "Jane Doe"'), { value: "Jane Doe", exact: true });
+  assert.deepEqual(extractTypedValueDetailed("enter Jane Doe"), { value: "Jane Doe", exact: true });
+  assert.equal(extractTypedValueDetailed("tell them the meeting moved to 3pm tomorrow").exact, false);
+});
+
+test("buildDecisionRequest includes a macro question only when macros exist", () => {
+  const withoutMacros = buildDecisionRequest({
+    transcript: "create a new user",
+    page: { url: "https://example.com", title: "Example" },
+    candidates: [],
+    shortcuts: [],
+  });
+  assert.equal(withoutMacros.questions.macro, undefined);
+
+  const withMacros = buildDecisionRequest({
+    transcript: "create a new user",
+    page: { url: "https://example.com", title: "Example" },
+    candidates: [],
+    shortcuts: [],
+    macros: [{ name: "create a new user", steps: ["go to users", "click new user"] }],
+  });
+  assert.deepEqual(Object.keys(withMacros.questions.macro.criteria).sort(), ["create a new user", "none"]);
+});
+
+test("parseDecision runs a macro when matched, before considering action/target", () => {
+  const macros = [{ name: "create a new user", steps: ["go to users", "click new user"] }];
+  const decision = parseDecision({
+    answers: {
+      action: { choice: "unclear", confidence: 0.3 },
+      macro: { choice: "create a new user", confidence: 0.88 },
+    },
+    transcript: "create a new user",
+    candidates: [],
+    shortcuts: [],
+    macros,
+  });
+  assert.equal(decision.action, "macro");
+  assert.equal(decision.macroName, "create a new user");
+  assert.deepEqual(decision.steps, macros[0].steps);
+});
+
+test("assessRisk flags destructive-sounding targets and low confidence", () => {
+  assert.equal(
+    assessRisk({ action: "click", targetLabel: "Delete user", confidence: 0.95 }, "click delete user").risky,
+    true,
+  );
+  assert.equal(
+    assessRisk({ action: "click", targetLabel: "Save", confidence: 0.9 }, "click save").risky,
+    false,
+  );
+  assert.equal(
+    assessRisk({ action: "click", targetLabel: "Save", confidence: 0.3 }, "click save").risky,
+    true,
+  );
+  assert.equal(assessRisk({ action: "scroll", targetLabel: "Delete user", confidence: 0.2 }, "scroll").risky, false);
 });

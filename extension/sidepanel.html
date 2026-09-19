@@ -12,10 +12,16 @@
     </header>
 
     <main>
-      <button id="micBtn" class="mic-btn" aria-pressed="false">
-        <span class="mic-icon" aria-hidden="true">&#127908;</span>
-        <span id="micLabel">Start listening</span>
-      </button>
+      <div class="controls">
+        <button id="micBtn" class="mic-btn" aria-pressed="false">
+          <span class="mic-icon" aria-hidden="true">&#127908;</span>
+          <span id="micLabel">Start listening</span>
+        </button>
+        <button id="recordBtn" class="record-btn" aria-pressed="false" title="Record a macro from what you say next">
+          <span aria-hidden="true">&#9210;</span>
+          <span id="recordLabel">Record macro</span>
+        </button>
+      </div>
 
       <p id="transcript" class="transcript" aria-live="polite"></p>
       <p id="statusLine" class="status-line"></p>

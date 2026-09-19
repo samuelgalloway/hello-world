@@ -18,16 +18,22 @@ const QUOTE_PAIRS = [
   ["‘", "’"],
 ];
 
-/** Best-effort extraction of the literal value a "type" instruction should enter. */
-export function extractTypedValue(transcript) {
+/**
+ * Best-effort extraction of the literal value a "type" instruction should
+ * enter, plus whether that extraction is confident enough to use as-is.
+ * `exact: false` means we only have the raw transcript to go on -- the
+ * caller should treat that as a candidate for composition by a real
+ * generative model (see lib/anthropic.js) rather than typing it verbatim.
+ */
+export function extractTypedValueDetailed(transcript) {
   const text = (transcript ?? "").trim();
-  if (!text) return "";
+  if (!text) return { value: "", exact: true };
 
   for (const [open, close] of QUOTE_PAIRS) {
     const start = text.indexOf(open);
     const end = start >= 0 ? text.indexOf(close, start + 1) : -1;
     if (start >= 0 && end > start) {
-      return text.slice(start + 1, end).trim();
+      return { value: text.slice(start + 1, end).trim(), exact: true };
     }
   }
 
@@ -40,10 +46,15 @@ export function extractTypedValue(transcript) {
   ];
   for (const re of patterns) {
     const m = text.match(re);
-    if (m && m[1] && m[1].trim()) return m[1].trim();
+    if (m && m[1] && m[1].trim()) return { value: m[1].trim(), exact: true };
   }
 
-  return text;
+  return { value: text, exact: false };
+}
+
+/** Convenience wrapper over extractTypedValueDetailed() for callers that just want the string. */
+export function extractTypedValue(transcript) {
+  return extractTypedValueDetailed(transcript).value;
 }
 
 /** Strip a leading navigation verb phrase, e.g. "go to X" -> "X". */
@@ -79,9 +90,53 @@ const ACTION_CRITERIA = {
   go_back: "Go back to the previous page in browser history.",
   go_forward: "Go forward to the next page in browser history.",
   submit: "Submit the current form, e.g. after filling fields, or pressing search/save/continue.",
+  undo: "Undo the previous action: restore the last typed value, or go back after the last navigation/click.",
   unclear:
     "The instruction doesn't map to a concrete browser action, or is missing information needed to act.",
 };
+
+const RISKY_KEYWORDS = [
+  "delete",
+  "remove",
+  "revoke",
+  "deactivate",
+  "disable",
+  "deny",
+  "reject",
+  "ban",
+  "terminate",
+  "cancel",
+  "charge",
+  "pay",
+  "purchase",
+  "refund",
+  "suspend",
+  "block",
+];
+const CONFIDENCE_THRESHOLD = 0.55;
+const RISK_GATED_ACTIONS = ["click", "submit", "navigate", "type"];
+
+/**
+ * Decide whether a decision should be confirmed out loud before acting,
+ * based on plain keyword matching and the model's own reported confidence
+ * -- not a model call, since "does this word appear" and "is this number
+ * below a threshold" are exact rules, not judgments.
+ */
+export function assessRisk(decision, transcript) {
+  if (!RISK_GATED_ACTIONS.includes(decision.action)) return { risky: false };
+
+  const haystack = `${decision.targetLabel || ""} ${transcript || ""}`.toLowerCase();
+  const keywordHit = RISKY_KEYWORDS.find((k) => haystack.includes(k));
+  if (keywordHit) {
+    return { risky: true, reason: `that looks like it might ${keywordHit} something` };
+  }
+
+  if (typeof decision.confidence === "number" && decision.confidence < CONFIDENCE_THRESHOLD) {
+    return { risky: true, reason: "I'm not fully sure that's what you meant" };
+  }
+
+  return { risky: false };
+}
 
 /**
  * Build the systemOne request for one voice turn.
@@ -91,9 +146,10 @@ const ACTION_CRITERIA = {
  * @param {{url: string, title: string}} args.page
  * @param {Array<{id: number, tag: string, role: string|null, label: string}>} args.candidates
  * @param {Array<{name: string, url: string}>} args.shortcuts
+ * @param {Array<{name: string, steps: string[]}>} [args.macros]
  * @param {Array<{transcript: string, action: string, targetLabel?: string}>} [args.history]
  */
-export function buildDecisionRequest({ transcript, page, candidates, shortcuts, history = [] }) {
+export function buildDecisionRequest({ transcript, page, candidates, shortcuts, macros = [], history = [] }) {
   const state = {
     transcript,
     page,
@@ -129,6 +185,17 @@ export function buildDecisionRequest({ transcript, page, candidates, shortcuts, 
     );
   }
 
+  if (macros.length > 0) {
+    const criteria = {
+      none: "Not asking to run any saved macro; treat this as a normal single-step instruction.",
+    };
+    for (const m of macros) criteria[m.name] = `Run the saved "${m.name}" macro (${m.steps.length} recorded steps).`;
+    questions.macro = choice(
+      "Is the user's instruction asking to run one of these saved macros (a named recorded sequence)?",
+      criteria,
+    );
+  }
+
   return { state, questions };
 }
 
@@ -137,7 +204,14 @@ export function buildDecisionRequest({ transcript, page, candidates, shortcuts, 
  * code-side rules (value extraction, URL resolution) around the model's
  * typed judgments.
  */
-export function parseDecision({ answers, transcript, candidates, shortcuts }) {
+export function parseDecision({ answers, transcript, candidates, shortcuts, macros = [] }) {
+  if (answers.macro && answers.macro.choice !== "none") {
+    const macro = macros.find((m) => m.name === answers.macro.choice);
+    if (macro) {
+      return { action: "macro", macroName: macro.name, steps: macro.steps, confidence: answers.macro.confidence };
+    }
+  }
+
   const action = answers.action.choice;
   const decision = { action, confidence: answers.action.confidence };
 
@@ -161,7 +235,9 @@ export function parseDecision({ answers, transcript, candidates, shortcuts }) {
   }
 
   if (action === "type") {
-    decision.value = extractTypedValue(transcript);
+    const { value, exact } = extractTypedValueDetailed(transcript);
+    decision.value = value;
+    decision.valueIsExact = exact;
   }
 
   return decision;
