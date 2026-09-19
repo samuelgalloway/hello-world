@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Voice Browser Settings</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        max-width: 560px;
+        margin: 32px auto;
+        padding: 0 16px;
+      }
+      h1 { font-size: 18px; }
+      h2 { font-size: 14px; margin-top: 32px; }
+      label { display: block; font-weight: 600; margin-bottom: 6px; }
+      input[type="text"], input[type="password"], input[type="url"] {
+        width: 100%;
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid #999;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+      .field { margin-bottom: 16px; }
+      .hint { color: #6b7280; font-size: 12px; margin-top: 4px; }
+      table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+      th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid #e5e7eb; font-size: 13px; }
+      button { cursor: pointer; padding: 8px 14px; border-radius: 6px; border: 1px solid #999; background: #6d28d9; color: white; font-weight: 600; }
+      button.secondary { background: transparent; color: inherit; }
+      .shortcut-row { display: flex; gap: 8px; margin-bottom: 8px; }
+      .shortcut-row input { flex: 1; }
+      #savedNote { color: #059669; font-size: 12px; margin-left: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1>Voice Browser Settings</h1>
+
+    <div class="field">
+      <label for="apiKey">TypeSafe API key</label>
+      <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off" />
+      <div class="hint">
+        Stored locally in this browser profile (chrome.storage.local) and only ever sent to
+        api.typesafe.ai from the extension's background service worker. Never checked into any repo.
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="model">Model override (optional)</label>
+      <input type="text" id="model" placeholder="jev-latest" />
+    </div>
+
+    <h2>Site shortcuts</h2>
+    <p class="hint">
+      Named shortcuts let you say things like "open the permissions dashboard" instead of a full
+      URL. When your instruction doesn't match a saved shortcut, the extension falls back to
+      treating it as a URL or a web search.
+    </p>
+    <table id="shortcutTable">
+      <thead><tr><th>Name</th><th>URL</th><th></th></tr></thead>
+      <tbody id="shortcutBody"></tbody>
+    </table>
+    <div class="shortcut-row">
+      <input type="text" id="newName" placeholder="name, e.g. permissions dashboard" />
+      <input type="url" id="newUrl" placeholder="https://..." />
+      <button type="button" id="addShortcut" class="secondary">Add</button>
+    </div>
+
+    <button type="button" id="save">Save</button>
+    <span id="savedNote" hidden>Saved.</span>
+
+    <script src="options.js"></script>
+  </body>
+</html>

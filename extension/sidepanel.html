@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Voice Browser</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Voice Browser</h1>
+      <button id="settingsBtn" title="Settings" aria-label="Settings">&#9881;</button>
+    </header>
+
+    <main>
+      <button id="micBtn" class="mic-btn" aria-pressed="false">
+        <span class="mic-icon" aria-hidden="true">&#127908;</span>
+        <span id="micLabel">Start listening</span>
+      </button>
+
+      <p id="transcript" class="transcript" aria-live="polite"></p>
+      <p id="statusLine" class="status-line"></p>
+
+      <ul id="log" class="log" aria-live="polite"></ul>
+    </main>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

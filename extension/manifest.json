@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Voice Browser (TypeSafe)",
+  "version": "0.1.0",
+  "description": "Drive the browser by voice: speak an instruction and it navigates, clicks, and fills forms for you.",
+  "permissions": ["sidePanel", "tabs", "storage", "scripting", "activeTab"],
+  "host_permissions": ["<all_urls>", "https://api.typesafe.ai/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "action": {
+    "default_title": "Open Voice Browser"
+  },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
+}
