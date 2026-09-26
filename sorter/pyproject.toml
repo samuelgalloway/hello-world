@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "photoday"
+version = "0.1.0"
+description = "Phase 1 of the sports photo platform: Subject/Team IDs, QR printing, card ingest, and the photo sorter."
+requires-python = ">=3.10"
+dependencies = [
+  "opencv-python-headless>=4.8",
+  "pillow>=10",
+  "qrcode>=7.4",
+  "reportlab>=4",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+photoday = "photoday.cli:main"
+
+[tool.setuptools]
+packages = ["photoday"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
